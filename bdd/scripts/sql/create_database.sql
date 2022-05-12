@@ -1,3 +1,27 @@
+-- Suppression des contraintes 
+-- ALTER TABLE Themes DROP FOREIGN KEY FK_Themes_Domaines;
+-- ALTER TABLE Sous_Themes DROP FOREIGN KEY FK_SThemes_Themes;
+-- ALTER TABLE Formations DROP FOREIGN KEY FK_Formation_SThemes;
+-- ALTER TABLE Formations DROP FOREIGN KEY FK_Formation_Utilisateur;
+-- ALTER TABLE Test_Prerequis DROP FOREIGN KEY FK_TestP_Formation;
+-- ALTER TABLE Validation_Test DROP FOREIGN KEY FK_ValidTest_TestP;
+-- ALTER TABLE Validation_Test DROP FOREIGN KEY FK_ValidTest_Utilisateur;
+-- ALTER TABLE Utilisateur DROP FOREIGN KEY FK_Utilisateur_TypeU;
+-- ALTER TABLE Operations DROP FOREIGN KEY FK_Ope_User;
+-- ALTER TABLE `Session` DROP FOREIGN KEY FK_Session_User;
+-- ALTER TABLE `Session` DROP FOREIGN KEY FK_Session_Formation;
+-- ALTER TABLE `Session` DROP FOREIGN KEY FK_Session_Salle;
+-- ALTER TABLE Inscription DROP FOREIGN KEY FK_Ins_Session;
+-- ALTER TABLE Inscription DROP FOREIGN KEY FK_Ins_Utilisateur;
+-- ALTER TABLE Check_logistic DROP FOREIGN KEY FK_Check_Utilisateur;
+-- ALTER TABLE Check_logistic DROP FOREIGN KEY FK_Check_Session;
+-- ALTER TABLE Emargements DROP FOREIGN KEY FK_Emarg_Inscription ;
+-- ALTER TABLE Evaluation DROP FOREIGN KEY FK_Eval_Inscription;
+-- ALTER TABLE Alerte DROP FOREIGN KEY FK_Alert_Inscription;
+-- ALTER TABLE Alerte DROP FOREIGN KEY FK_Alert_Session ;
+-- ALTER TABLE Alerte DROP FOREIGN KEY FK_Alert_User ;
+
+
 -- ######################### Nouvelle Création ###########################
 -- Creation de la BDD
 DROP DATABASE IF EXISTS it_training_bdd;
@@ -83,8 +107,8 @@ CREATE TABLE `Validation_Test` (
 
 CREATE TABLE `Salle` (
   `id_salle` int PRIMARY KEY AUTO_INCREMENT,
-  `adresse` boolean,
-  `nom_salle` boolean not null,
+  `adresse` varchar(50),
+  `nom_salle` varchar(50) not null,
   `nbre_place` int not null,
   `statut` varchar(5) not null
 );
@@ -169,4 +193,3 @@ ALTER TABLE Evaluation ADD CONSTRAINT FK_Eval_Inscription FOREIGN KEY (id_inscri
 ALTER TABLE Alerte ADD CONSTRAINT FK_Alert_Inscription FOREIGN KEY (id_inscription) REFERENCES Inscription(id_inscription);
 ALTER TABLE Alerte ADD CONSTRAINT FK_Alert_Session FOREIGN KEY (id_session) REFERENCES `Session`(id_session);
 ALTER TABLE Alerte ADD CONSTRAINT FK_Alert_User FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur);
-
