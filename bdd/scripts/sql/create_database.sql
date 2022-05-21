@@ -34,83 +34,95 @@ use it_training_bdd;
 -- Validation_Test, Salle, `Session`, `Check_logistic`, `Inscription`, `Emargements`, `Evaluation`, `Alerte`;
 
 -- Creation des tables
- CREATE TABLE `Utilisateur` (
-  `id_utilisateur` int PRIMARY KEY AUTO_INCREMENT,
-  `nom` varchar(50) not null,
+CREATE TABLE `Utilisateur` (
+  `idUtilisateur` PRIMARY KEY AUTO_INCREMENT,
+  `nom` varchar(50), not Null,
   `prenom` varchar(50),
-  `email` varchar(20) UNIQUE not null,
-  `tel` varchar(20),
+  `telephone` varchar(20),
+  `email` varchar(50) UNIQUE,
+  `dateNaiss` date,
+  `numeroSiret` varchar(50),
+  `certifications` varchar(250),
+  `dernierDiplome` varchar(250),
   `login` varchar(20) not null,
   `password` varchar(20) not null,
   `societe` varchar(50),
-  `statut` varchar(5),
-  `id_type` int not null
+  `idTypeUser` int noot null,
 );
 
-CREATE TABLE `Type_utilisateur` (
-  `id_type` int PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE `TypeUtilisateur` (
+  `idType` int PRIMARY KEY AUTO_INCREMENT,
   `nom` varchar(50) not null,
   `description` varchar(120)
 );
 
 CREATE TABLE `Operations` (
-  `id_operation` int PRIMARY KEY AUTO_INCREMENT,
+  `idOperation` int PRIMARY KEY AUTO_INCREMENT,
   `nom` varchar(50) not null,
   `description` varchar(150),
-  `date_debut` datetime not null,
-  `id_utilisateur` int not null
+  `dateDebut` datetime not null,
+  `idUtilisateur` int not null
 );
 
 CREATE TABLE `Domaines` (
-  `id_domaine` int PRIMARY KEY AUTO_INCREMENT,
+  `idDomaine` int PRIMARY KEY AUTO_INCREMENT,
   `nom` varchar(120) not null,
   `description` varchar(250)
 );
 
 CREATE TABLE `Themes` (
-  `id_theme` int PRIMARY KEY AUTO_INCREMENT,
+  `idTheme` int PRIMARY KEY AUTO_INCREMENT,
   `nom` varchar(120) not null,
   `description` varchar(250),
-  `id_domaine` int not null
+  `idDomaine` int not null
 );
 
-CREATE TABLE `Sous_Themes` (
-  `id_stheme` int PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE `SousThemes` (
+  `idStheme` int PRIMARY KEY AUTO_INCREMENT,
   `nom` varchar(120) not null,
   `description` varchar(250),
-  `id_theme` int not null
+  `idTheme` int not null
 );
 
 CREATE TABLE `Formation` (
-  `id_formation` int PRIMARY KEY AUTO_INCREMENT,
+  `idFormation` int PRIMARY KEY AUTO_INCREMENT,
   `nom` varchar(120) not null,
   `description` varchar(250),
-  `id_stheme` int not null,
-  `id_resp_for` int not null
+  `idStheme` int not null,
+  `idRespFor` int not null
 );
 
 CREATE TABLE `Test_Prerequis` (
-  `id_test` int PRIMARY KEY AUTO_INCREMENT,
+  `idTest` int PRIMARY KEY AUTO_INCREMENT,
   `nom` varchar(30) not null,
   `description` varchar(250),
-  `id_formation` int not null
+  `idFormation` int not null
 );
 
-CREATE TABLE `Validation_Test` (
-  `id_val` int PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE `ValidationTest` (
+  `idVal` int PRIMARY KEY AUTO_INCREMENT,
   `nom` varchar(250) not null,
   `commentaires` varchar(250),
   `resultat` numeric not null,
-  `id_test` int not null,
-  `id_apprenant` int not null
+  `idtest` int not null,
+  `idapprenant` int not null
 );
 
 CREATE TABLE `Salle` (
-  `id_salle` int PRIMARY KEY AUTO_INCREMENT,
+  `idSalle` int PRIMARY KEY AUTO_INCREMENT,
   `adresse` varchar(50),
-  `nom_salle` varchar(50) not null,
-  `nbre_place` int not null,
+  `nomSalle` varchar(50) not null,
+  `nbrePlaces` int not null,
   `statut` varchar(5) not null
+);
+
+CREATE TABLE `AttribSalle` (
+  `idAttribSalle` int,
+  `dateAttrib` date,
+  `statut` varchar(5),
+  `idSession` int not null,
+  `idSalle` int not null,
+  `idRespFor` int not null
 );
 
 CREATE TABLE `Session` (
@@ -118,47 +130,49 @@ CREATE TABLE `Session` (
   `nom` varchar(120) not null,
   `description` varchar(250),
   `statut` varchar(5) not null,
-  `date_debut` date not null,
-  `date_fin` date not null,
-  `prix` decimal(5,2) not null,
-  `id_salle` int not null,
-  `id_formateur` int not null,
-  `id_formation` int not null
+  `type` varchar(5) not null,
+  `dateDebut` date not null,
+  `dateFin` date not null,
+  `prix` decimal(5,2),
+  `idFormateur` int not null,
+  `idFormation` int not null,
 );
 
-CREATE TABLE `Check_logistic` (
-  `id_check` int PRIMARY KEY AUTO_INCREMENT,
-  `res_salle` boolean,
-  `verif_outils` boolean,
-  `statut` varchar(5) not null,
-  `id_resp_log` int not null,
-  `id_session` int not null
+CREATE TABLE `CheckLogistic` (
+  `idCheck` int not null,
+  `salleIsOk` boolean not null,
+  `toolsIsOk` boolean not null,
+  `commentaires` varchar(250),
+  `idRespLog` int not null,
+  `idSession` int not null,
 );
 
 CREATE TABLE `Inscription` (
-  `id_inscription` int PRIMARY KEY AUTO_INCREMENT,
+  `idInscription` int PRIMARY KEY AUTO_INCREMENT,
   `statut` varchar(5) not null,
-  `date_inscription` date not null,
-  `id_apprenant` int not null,
-  `id_session` int not null
+  `dateInscription` date not null,
+  `idApprenant` int not null,
+  `idSession` int not null
 );
 
 CREATE TABLE `Emargements` (
-  `id_iemargement` int PRIMARY KEY AUTO_INCREMENT,
+  `idEmargement` int PRIMARY KEY AUTO_INCREMENT,
+  `nom` varchar(50) not null,
   `periode` varchar(5) not null,
-  `statut` varchar(5) not null,
-  `date_sign` date,
-  `etat_presence` varchar(10),
-  `id_inscription` int not null
+  `statut` varchar(5),
+  `dateSign` date,
+  `presenceIsOk` boolean,
+  `idInscription` int not null,
 );
 
-CREATE TABLE `Evaluation` (
-  `id_eval` int PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE `Evaluation ` (
+  `idEval` int PRIMARY KEY AUTO_INCREMENT,
   `nom` varchar(120) not null,
   `description` varchar(250),
-  `resultat` numeric,
-  `statut` varchar(3) not null,
-  `id_inscription` int not null
+  `dateEval` date not null,
+  `statut` varchar(5),
+  `evalIsOk` boolean,
+  `idInscription` int not null,
 );
 
 CREATE TABLE `Alerte` (
@@ -166,30 +180,28 @@ CREATE TABLE `Alerte` (
   `gravite` varchar(5) not null,
   `statut` varchar(5) not null,
   `type` varchar(5) not null,
-  `id_utilisateur` int,
-  `id_session` int,
-  `id_inscription` int
+  `idUtilisateur` int,
 );
 
 -- Creation des contraintes
-ALTER TABLE Themes ADD CONSTRAINT FK_Themes_Domaines FOREIGN KEY (id_domaine) REFERENCES Domaines(id_domaine); -- ON DELETE CASCADE;
-ALTER TABLE Sous_Themes ADD CONSTRAINT FK_SThemes_Themes FOREIGN KEY (id_theme) REFERENCES Themes(id_theme);
-ALTER TABLE Formation ADD CONSTRAINT FK_Formation_SThemes FOREIGN KEY (id_stheme) REFERENCES Sous_Themes(id_stheme);
-ALTER TABLE Formation ADD CONSTRAINT FK_Formation_Utilisateur FOREIGN KEY (id_resp_for) REFERENCES Utilisateur(id_utilisateur);
-ALTER TABLE Test_Prerequis ADD CONSTRAINT FK_TestP_Formation FOREIGN KEY (id_formation) REFERENCES Formation(id_formation);
-ALTER TABLE Validation_Test ADD CONSTRAINT FK_ValidTest_TestP FOREIGN KEY (id_test) REFERENCES Test_Prerequis(id_test);
-ALTER TABLE Validation_Test ADD CONSTRAINT FK_ValidTest_Utilisateur FOREIGN KEY (id_apprenant) REFERENCES Utilisateur(id_utilisateur);
-ALTER TABLE Utilisateur ADD CONSTRAINT FK_Utilisateur_TypeU FOREIGN KEY (id_type) REFERENCES Type_utilisateur(id_type);
-ALTER TABLE Operations ADD CONSTRAINT FK_Ope_User FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur);
-ALTER TABLE `Session` ADD CONSTRAINT FK_Session_User FOREIGN KEY (id_formateur) REFERENCES Utilisateur(id_utilisateur);
-ALTER TABLE `Session` ADD CONSTRAINT FK_Session_Formation FOREIGN KEY (id_formation) REFERENCES Formation(id_formation);
-ALTER TABLE `Session` ADD CONSTRAINT FK_Session_Salle FOREIGN KEY (id_salle) REFERENCES Salle(id_salle);
-ALTER TABLE Inscription ADD CONSTRAINT FK_Ins_Session FOREIGN KEY (id_session) REFERENCES `Session`(id_session);
-ALTER TABLE Inscription ADD CONSTRAINT FK_Ins_Utilisateur FOREIGN KEY (id_apprenant) REFERENCES Utilisateur(id_utilisateur);
-ALTER TABLE Check_logistic ADD CONSTRAINT FK_Check_Utilisateur FOREIGN KEY (id_resp_log) REFERENCES Utilisateur(id_utilisateur);
-ALTER TABLE Check_logistic ADD CONSTRAINT FK_Check_Session FOREIGN KEY (id_session) REFERENCES `Session`(id_session);
-ALTER TABLE Emargements ADD CONSTRAINT FK_Emarg_Inscription FOREIGN KEY (id_inscription) REFERENCES Inscription(id_inscription);
-ALTER TABLE Evaluation ADD CONSTRAINT FK_Eval_Inscription FOREIGN KEY (id_inscription) REFERENCES Inscription(id_inscription);
-ALTER TABLE Alerte ADD CONSTRAINT FK_Alert_Inscription FOREIGN KEY (id_inscription) REFERENCES Inscription(id_inscription);
-ALTER TABLE Alerte ADD CONSTRAINT FK_Alert_Session FOREIGN KEY (id_session) REFERENCES `Session`(id_session);
-ALTER TABLE Alerte ADD CONSTRAINT FK_Alert_User FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur);
+ALTER TABLE Themes ADD CONSTRAINT FK_Themes_Domaines FOREIGN KEY (idDomaine) REFERENCES Domaines(idDomaine); -- ON DELETE CASCADE;
+ALTER TABLE Sous_Themes ADD CONSTRAINT FK_SThemes_Themes FOREIGN KEY (idTheme) REFERENCES Themes(idTheme);
+ALTER TABLE Formation ADD CONSTRAINT FK_Formation_SThemes FOREIGN KEY (idStheme) REFERENCES SousThemes(idStheme);
+ALTER TABLE Formation ADD CONSTRAINT FK_Formation_Utilisateur FOREIGN KEY (idRespFor) REFERENCES Utilisateur(idUtilisateur);
+ALTER TABLE Test_Prerequis ADD CONSTRAINT FK_TestP_Formation FOREIGN KEY (idFormation) REFERENCES Formation(idFormation);
+ALTER TABLE Validation_Test ADD CONSTRAINT FK_ValidTest_TestP FOREIGN KEY (idTest) REFERENCES TestPrerequis(idTest);
+ALTER TABLE Validation_Test ADD CONSTRAINT FK_ValidTest_Utilisateur FOREIGN KEY (idApprenant) REFERENCES Utilisateur(idUtilisateur);
+ALTER TABLE Utilisateur ADD CONSTRAINT FK_Utilisateur_TypeU FOREIGN KEY (idType) REFERENCES TypeUtilisateur(idType);
+ALTER TABLE Operations ADD CONSTRAINT FK_Ope_User FOREIGN KEY (idUtilisateur) REFERENCES Utilisateur(idUtilisateur);
+ALTER TABLE `Session` ADD CONSTRAINT FK_Session_User FOREIGN KEY (idFormateur) REFERENCES Utilisateur(idUtilisateur);
+ALTER TABLE `Session` ADD CONSTRAINT FK_Session_Formation FOREIGN KEY (idFormation) REFERENCES Formation(idFormation);
+ALTER TABLE `AttribSalle` ADD CONSTRAINT FK_AttribS_Session FOREIGN KEY (idSession) REFERENCES Session(idSession);
+ALTER TABLE `AttribSalle` ADD CONSTRAINT FK_AttribS_Salle FOREIGN KEY (idSalle) REFERENCES Salle(idSalle);
+ALTER TABLE `AttribSalle` ADD CONSTRAINT FK_AttribS_User FOREIGN KEY (idRespFor) REFERENCES Utilisateur(idUtilisateur);
+ALTER TABLE Inscription ADD CONSTRAINT FK_Ins_Session FOREIGN KEY (idSession) REFERENCES `Session`(idSession);
+ALTER TABLE Inscription ADD CONSTRAINT FK_Ins_Utilisateur FOREIGN KEY (idApprenant) REFERENCES Utilisateur(idUtilisateur);
+ALTER TABLE CheckLogistic ADD CONSTRAINT FK_Check_Utilisateur FOREIGN KEY (idRespLog) REFERENCES Utilisateur(idUtilisateur);
+ALTER TABLE CheckLogistic ADD CONSTRAINT FK_Check_Session FOREIGN KEY (idSession) REFERENCES `Session`(idSession);
+ALTER TABLE Emargements ADD CONSTRAINT FK_Emarg_Inscription FOREIGN KEY (idInscription) REFERENCES Inscription(idInscription);
+ALTER TABLE Evaluation ADD CONSTRAINT FK_Eval_Inscription FOREIGN KEY (idInscription) REFERENCES Inscription(idInscription);
+ALTER TABLE Alerte ADD CONSTRAINT FK_Alert_User FOREIGN KEY (idUtilisateur) REFERENCES Utilisateur(idUtilisateur);
