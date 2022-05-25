@@ -5,20 +5,24 @@ import java.time.LocalDate;
 public class Formateur extends Utilisateur {
 	
 
-private String certification;
+private String certifications;
 
 public Formateur(int idUtilisateur, String codeUser, String nom, String prenom, String telephone, String email,
-		LocalDate dateNaiss, String numeroSiret, String login, String password, String societe) {
-	super(idUtilisateur, codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, login, password, societe);
+		LocalDate dateNaiss, String numeroSiret, String login, String password, String societe, String statut) {
+	super(idUtilisateur, codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, login, password, societe, statut);
 	
 }
 
+
+	
+
+
 public String getCertification() {
-	return certification;
+	return certifications;
 }
 
-public void setCertification(String certification) {
-	this.certification = certification;
+public void setCertification(String certifications) {
+	this.certifications = certifications;
 }
   
 }

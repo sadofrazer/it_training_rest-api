@@ -14,8 +14,7 @@ public class Utilisateur {
 	private String login;
 	private String password;
 	private String societe;
-	
-	public Utilisateur() {};
+	private String statut;
 	
 	
 	public Utilisateur(String codeUser, String nom, String prenom, String telephone, String email, LocalDate dateNaiss,
@@ -35,7 +34,7 @@ public class Utilisateur {
 
 
 	public Utilisateur(int idUtilisateur, String codeUser, String nom, String prenom, String telephone, String email,
-				LocalDate dateNaiss, String numeroSiret, String login, String password, String societe) {
+				LocalDate dateNaiss, String numeroSiret, String login, String password, String societe, String statut) {
 			super();
 			this.idUtilisateur = idUtilisateur;
 			this.codeUser = codeUser;
@@ -48,6 +47,7 @@ public class Utilisateur {
 			this.login = login;
 			this.password = password;
 			this.societe = societe;
+			this.statut = statut;
 			
 }
 
@@ -138,4 +138,15 @@ public class Utilisateur {
 	public void setSociete(String societe) {
 		this.societe = societe;
 	}
+
+
+	public String getStatut() {
+		return statut;
+	}
+
+
+	public void setStatut(String statut) {
+		this.statut = statut;
+	}
+	
 }
