@@ -1,8 +1,8 @@
 -- Suppression des contraintes 
--- ALTER TABLE Themes DROP FOREIGN KEY FK_Themes_Domaines;
--- ALTER TABLE SousThemes DROP FOREIGN KEY FK_SThemes_Themes;
--- ALTER TABLE Formations DROP FOREIGN KEY FK_Formation_SThemes;
--- ALTER TABLE Formations DROP FOREIGN KEY FK_Formation_Utilisateur;
+-- ALTER TABLE Theme DROP FOREIGN KEY FK_Themes_Domaines;
+-- ALTER TABLE SousTheme DROP FOREIGN KEY FK_SThemes_Themes;
+-- ALTER TABLE Formation DROP FOREIGN KEY FK_Formation_SThemes;
+-- ALTER TABLE Formation DROP FOREIGN KEY FK_Formation_Utilisateur;
 -- ALTER TABLE TestPrerequis DROP FOREIGN KEY FK_TestP_Formation;
 -- ALTER TABLE ValidationTest DROP FOREIGN KEY FK_ValidTest_TestP;
 -- ALTER TABLE ValidationTest DROP FOREIGN KEY FK_ValidTest_Utilisateur;
@@ -15,7 +15,7 @@
 -- ALTER TABLE Inscription DROP FOREIGN KEY FK_Ins_Utilisateur;
 -- ALTER TABLE CheckLogistic DROP FOREIGN KEY FK_Check_Utilisateur;
 -- ALTER TABLE CheckLogistic DROP FOREIGN KEY FK_Check_Session;
--- ALTER TABLE Emargements DROP FOREIGN KEY FK_Emarg_Inscription ;
+-- ALTER TABLE Emargement DROP FOREIGN KEY FK_Emarg_Inscription ;
 -- ALTER TABLE Evaluation DROP FOREIGN KEY FK_Eval_Inscription;
 -- ALTER TABLE Alerte DROP FOREIGN KEY FK_Alert_Inscription;
 -- ALTER TABLE Alerte DROP FOREIGN KEY FK_Alert_Session ;
@@ -48,6 +48,7 @@ CREATE TABLE `Utilisateur` (
   `login` varchar(20) not null,
   `password` varchar(20) not null,
   `societe` varchar(50),
+  `fonction` varchar(50),
   `statut` varchar(10) not null, -- ACTIVE / INACTIVE attribut à utiliser pour faire du safe delete
   `idTypeUser` int not null
 );

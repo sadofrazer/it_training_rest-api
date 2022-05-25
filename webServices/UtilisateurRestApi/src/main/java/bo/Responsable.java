@@ -5,21 +5,29 @@ import java.time.LocalDate;
 public class Responsable extends Utilisateur {
 	
 
-private String statut;
+private String fonction;
 
-public Responsable(int idUtilisateur, String codeUser, String nom, String prenom, String telephone, String email,
-		LocalDate dateNaiss, String numeroSiret, String login, String password, String societe) {
-	super(idUtilisateur, codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, login, password, societe);
+public Responsable() {
+	super();
 	
 }
 
-public String getStatut() {
-	return statut;
+public Responsable(int idUtilisateur, String codeUser, String nom, String prenom, String telephone, String email,
+		LocalDate dateNaiss, String numeroSiret, String login, String password, String societe, String statut) {
+	super(idUtilisateur, codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, login, password, societe, statut);
+	
 }
 
-public void setStatut(String statut) {
-	this.statut = statut;
+public String getFonction() {
+	return fonction;
 }
+
+public void setFonction(String fonction) {
+	this.fonction = fonction;
+}
+
+
+
   
   
 }
