@@ -3,10 +3,10 @@
 
 DELETE FROM `Utilisateur`;
 DELETE FROM `TypeUtilisateur`;
-DELETE FROM `Operations`;
+DELETE FROM `Operation`;
 DELETE FROM `Domaines`;
-DELETE FROM `Themes`;
-DELETE FROM `SousThemes`;
+DELETE FROM `Theme`;
+DELETE FROM `SousTheme`;
 DELETE FROM `Formation`;
 DELETE FROM `TestPrerequis`;
 DELETE FROM `ValidationTest`;
@@ -14,39 +14,39 @@ DELETE FROM `Salle`;
 DELETE FROM `Session`;
 DELETE FROM `CheckLogistic`;
 DELETE FROM `Inscription`;
-DELETE FROM `Emargements`;
+DELETE FROM `Emargement`;
 DELETE FROM `Evaluation`;
 DELETE FROM `Alerte`;
 DELETE FROM `AttribSalle`;
 
 -- Domaines
-INSERT INTO Domaines (codeDom, nom,`description`) 
+INSERT INTO Domaine (codeDom, nom,`description`) 
 VALUES('DINF00001', 'Technologies Informatiques', 'Domaine traitant des principales technologies informatiques existantes à ce jour' );
 
-INSERT INTO Domaines (codeDom, nom,`description`) 
+INSERT INTO Domaine (codeDom, nom,`description`) 
 VALUES('DINF00002', 'Gouvernance Informatiques', 'Domaine traitant du management, la stratégie et les gestion des projets TIC' );
 
-INSERT INTO Domaines (codeDom, nom,`description`) 
+INSERT INTO Domaine (codeDom, nom,`description`) 
 VALUES('DINF00003', 'Gouvernance Informatiques', 'Domaine traitant du management, la stratégie et les gestion des projets TIC' );
 
 -- Themes
-INSERT INTO Themes (codeTheme, nom,`description`, idDomaine) 
+INSERT INTO Theme (codeTheme, nom,`description`, idDomaine) 
 VALUES('TINF00001','Les frameworks web', 'Apprendre à développer des application web complètes... Dev FULLSTACK', 1);
 
-INSERT INTO Themes (codeTheme, nom,`description`, idDomaine) 
+INSERT INTO Theme (codeTheme, nom,`description`, idDomaine) 
 VALUES('TINF00002','Devops, Industrialisation et gestion de la production', 'Formations DevOps, industrialisation et gestion de la production', 2);
 
-INSERT INTO Themes (codeTheme, nom,`description`, idDomaine) 
+INSERT INTO Theme (codeTheme, nom,`description`, idDomaine) 
 VALUES('TINF00003','Cloud computing', 'Formations Cloud computing', 3);
 
 -- SousThemes
-INSERT INTO SousThemes (codeSthem, nom,`description`, idTheme) 
+INSERT INTO SousTheme (codeSthem, nom,`description`, idTheme) 
 VALUES('STINF00001', 'Création de sites web', 'Formations Création de sites web', 1);
 
-INSERT INTO SousThemes (codeSthem, nom,`description`, idTheme) 
+INSERT INTO SousTheme (codeSthem, nom,`description`, idTheme) 
 VALUES('STINF00002', 'Intégration et déploiement continue', 'Formations Intégration continue', 2);
 
-INSERT INTO SousThemes (codeSthem, nom,`description`, idTheme) 
+INSERT INTO SousTheme (codeSthem, nom,`description`, idTheme) 
 VALUES('STINF00003', 'Amazon Web Services', 'Formations Amazon Web Services', 3);
 
 -- TypeUtilisateur
@@ -134,9 +134,9 @@ INSERT INTO Inscription (codeInscription, statut, dateInscription, idApprenant, 
 VALUES('INS00001', 'NEW', STR_TO_DATE('15-May-2022', '%d-%M-%Y'), 5, 1);
 
 -- Emargements
-INSERT INTO Emargements (codeEmarg, nom, periode, statut, dateSign, presenceIsOk, idInscription) 
+INSERT INTO Emargement (codeEmarg, nom, periode, statut, dateSign, presenceIsOk, idInscription) 
 VALUES('SIGN00001', 'SIGNATURE MATIN SESS00001', 'MATIN', 'NEW', NULL, false, 1);
-INSERT INTO Emargements (codeEmarg, nom, periode, statut, dateSign, presenceIsOk, idInscription) 
+INSERT INTO Emargement (codeEmarg, nom, periode, statut, dateSign, presenceIsOk, idInscription) 
 VALUES('SIGN00001', 'SIGNATURE SOIR SESS00001', 'SOIR', 'NEW', NULL, false, 1);
 
 -- Evaluations

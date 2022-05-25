@@ -69,14 +69,14 @@ CREATE TABLE `Operations` (
 );
 
 
-CREATE TABLE `Domaines` (
+CREATE TABLE `Domaine` (
   `idDomaine` int PRIMARY KEY AUTO_INCREMENT,
   `codeDom` varchar(10) not null UNIQUE,
   `nom` varchar(250) not null,
   `description` varchar(250)
 );
 
-CREATE TABLE `Themes` (
+CREATE TABLE `Theme` (
   `idTheme` int PRIMARY KEY AUTO_INCREMENT,
   `codeTheme` varchar(10) not null UNIQUE,
   `nom` varchar(250) not null,
@@ -84,7 +84,7 @@ CREATE TABLE `Themes` (
   `idDomaine` int not null
 );
 
-CREATE TABLE `SousThemes` (
+CREATE TABLE `SousTheme` (
   `idStheme` int PRIMARY KEY AUTO_INCREMENT,
   `codeSthem` varchar(10) not null UNIQUE,
   `nom` varchar(250) not null,
@@ -172,7 +172,7 @@ CREATE TABLE `Inscription` (
   `idSession` int not null
 );
 
-CREATE TABLE `Emargements` (
+CREATE TABLE `Emargement` (
   `idEmargement` int PRIMARY KEY AUTO_INCREMENT,
   `codeEmarg` varchar(10) not null, -- SIGN00001
   `nom` varchar(120) not null,
@@ -206,9 +206,9 @@ CREATE TABLE `Alerte` (
 
 
 -- Creation des contraintes
-ALTER TABLE Themes ADD CONSTRAINT FK_Themes_Domaines FOREIGN KEY (idDomaine) REFERENCES Domaines(idDomaine); -- ON DELETE CASCADE;
-ALTER TABLE SousThemes ADD CONSTRAINT FK_SThemes_Themes FOREIGN KEY (idTheme) REFERENCES Themes(idTheme);
-ALTER TABLE Formation ADD CONSTRAINT FK_Formation_SThemes FOREIGN KEY (idStheme) REFERENCES SousThemes(idStheme);
+ALTER TABLE Theme ADD CONSTRAINT FK_Themes_Domaine FOREIGN KEY (idDomaine) REFERENCES Domaine(idDomaine); -- ON DELETE CASCADE;
+ALTER TABLE SousTheme ADD CONSTRAINT FK_STheme_Theme FOREIGN KEY (idTheme) REFERENCES Theme(idTheme);
+ALTER TABLE Formation ADD CONSTRAINT FK_Formation_STheme FOREIGN KEY (idStheme) REFERENCES SousTheme(idStheme);
 ALTER TABLE Formation ADD CONSTRAINT FK_Formation_Utilisateur FOREIGN KEY (idRespCat) REFERENCES Utilisateur(idUtilisateur);
 ALTER TABLE TestPrerequis ADD CONSTRAINT FK_TestP_Formation FOREIGN KEY (idFormation) REFERENCES Formation(idFormation);
 ALTER TABLE ValidationTest ADD CONSTRAINT FK_ValidTest_TestP FOREIGN KEY (idTest) REFERENCES TestPrerequis(idTest);
@@ -225,7 +225,7 @@ ALTER TABLE Inscription ADD CONSTRAINT FK_Ins_Session FOREIGN KEY (idSession) RE
 ALTER TABLE Inscription ADD CONSTRAINT FK_Ins_Utilisateur FOREIGN KEY (idApprenant) REFERENCES Utilisateur(idUtilisateur);
 ALTER TABLE CheckLogistic ADD CONSTRAINT FK_Check_Utilisateur FOREIGN KEY (idRespLog) REFERENCES Utilisateur(idUtilisateur);
 ALTER TABLE CheckLogistic ADD CONSTRAINT FK_Check_Session FOREIGN KEY (idSession) REFERENCES `Session`(idSession);
-ALTER TABLE Emargements ADD CONSTRAINT FK_Emarg_Inscription FOREIGN KEY (idInscription) REFERENCES Inscription(idInscription);
+ALTER TABLE Emargement ADD CONSTRAINT FK_Emarg_Inscription FOREIGN KEY (idInscription) REFERENCES Inscription(idInscription);
 ALTER TABLE Evaluation ADD CONSTRAINT FK_Eval_Inscription FOREIGN KEY (idInscription) REFERENCES Inscription(idInscription);
 ALTER TABLE Alerte ADD CONSTRAINT FK_Alert_User FOREIGN KEY (idUtilisateur) REFERENCES Utilisateur(idUtilisateur);
 
@@ -238,9 +238,9 @@ ALTER TABLE Alerte ADD CONSTRAINT FK_Alert_User FOREIGN KEY (idUtilisateur) REFE
 DELETE FROM `Utilisateur`;
 DELETE FROM `TypeUtilisateur`;
 DELETE FROM `Operations`;
-DELETE FROM `Domaines`;
-DELETE FROM `Themes`;
-DELETE FROM `SousThemes`;
+DELETE FROM `Domaine`;
+DELETE FROM `Theme`;
+DELETE FROM `SousTheme`;
 DELETE FROM `Formation`;
 DELETE FROM `TestPrerequis`;
 DELETE FROM `ValidationTest`;
@@ -248,39 +248,39 @@ DELETE FROM `Salle`;
 DELETE FROM `Session`;
 DELETE FROM `CheckLogistic`;
 DELETE FROM `Inscription`;
-DELETE FROM `Emargements`;
+DELETE FROM `Emargement`;
 DELETE FROM `Evaluation`;
 DELETE FROM `Alerte`;
 DELETE FROM `AttribSalle`;
 
 -- Domaines
-INSERT INTO Domaines (codeDom, nom,`description`) 
+INSERT INTO Domaine (codeDom, nom,`description`) 
 VALUES('DINF00001', 'Technologies Informatiques', 'Domaine traitant des principales technologies informatiques existantes à ce jour' );
 
-INSERT INTO Domaines (codeDom, nom,`description`) 
+INSERT INTO Domaine (codeDom, nom,`description`) 
 VALUES('DINF00002', 'Gouvernance Informatiques', 'Domaine traitant du management, la stratégie et les gestion des projets TIC' );
 
-INSERT INTO Domaines (codeDom, nom,`description`) 
+INSERT INTO Domaine (codeDom, nom,`description`) 
 VALUES('DINF00003', 'Gouvernance Informatiques', 'Domaine traitant du management, la stratégie et les gestion des projets TIC' );
 
 -- Themes
-INSERT INTO Themes (codeTheme, nom,`description`, idDomaine) 
+INSERT INTO Theme (codeTheme, nom,`description`, idDomaine) 
 VALUES('TINF00001','Les frameworks web', 'Apprendre à développer des application web complètes... Dev FULLSTACK', 1);
 
-INSERT INTO Themes (codeTheme, nom,`description`, idDomaine) 
+INSERT INTO Theme (codeTheme, nom,`description`, idDomaine) 
 VALUES('TINF00002','Devops, Industrialisation et gestion de la production', 'Formations DevOps, industrialisation et gestion de la production', 2);
 
-INSERT INTO Themes (codeTheme, nom,`description`, idDomaine) 
+INSERT INTO Theme (codeTheme, nom,`description`, idDomaine) 
 VALUES('TINF00003','Cloud computing', 'Formations Cloud computing', 3);
 
 -- SousThemes
-INSERT INTO SousThemes (codeSthem, nom,`description`, idTheme) 
+INSERT INTO SousTheme (codeSthem, nom,`description`, idTheme) 
 VALUES('STINF00001', 'Création de sites web', 'Formations Création de sites web', 1);
 
-INSERT INTO SousThemes (codeSthem, nom,`description`, idTheme) 
+INSERT INTO SousTheme (codeSthem, nom,`description`, idTheme) 
 VALUES('STINF00002', 'Intégration et déploiement continue', 'Formations Intégration continue', 2);
 
-INSERT INTO SousThemes (codeSthem, nom,`description`, idTheme) 
+INSERT INTO SousTheme (codeSthem, nom,`description`, idTheme) 
 VALUES('STINF00003', 'Amazon Web Services', 'Formations Amazon Web Services', 3);
 
 -- TypeUtilisateur
@@ -368,9 +368,9 @@ INSERT INTO Inscription (codeInscription, statut, dateInscription, idApprenant, 
 VALUES('INS00001', 'NEW', STR_TO_DATE('15-May-2022', '%d-%M-%Y'), 5, 1);
 
 -- Emargements
-INSERT INTO Emargements (codeEmarg, nom, periode, statut, dateSign, presenceIsOk, idInscription) 
+INSERT INTO Emargement (codeEmarg, nom, periode, statut, dateSign, presenceIsOk, idInscription) 
 VALUES('SIGN00001', 'SIGNATURE MATIN SESS00001', 'MATIN', 'NEW', NULL, false, 1);
-INSERT INTO Emargements (codeEmarg, nom, periode, statut, dateSign, presenceIsOk, idInscription) 
+INSERT INTO Emargement (codeEmarg, nom, periode, statut, dateSign, presenceIsOk, idInscription) 
 VALUES('SIGN00001', 'SIGNATURE SOIR SESS00001', 'SOIR', 'NEW', NULL, false, 1);
 
 -- Evaluations
