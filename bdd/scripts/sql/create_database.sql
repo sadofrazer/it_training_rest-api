@@ -48,6 +48,7 @@ CREATE TABLE `Utilisateur` (
   `login` varchar(20) not null,
   `password` varchar(20) not null,
   `societe` varchar(50),
+  `fonction` varchar(50),
   `statut` varchar(10) not null, -- ACTIVE / INACTIVE attribut à utiliser pour faire du safe delete
   `idTypeUser` int not null
 );

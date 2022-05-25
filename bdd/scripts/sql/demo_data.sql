@@ -3,8 +3,8 @@
 
 DELETE FROM `Utilisateur`;
 DELETE FROM `TypeUtilisateur`;
-DELETE FROM `Operation`;
-DELETE FROM `Domaines`;
+DELETE FROM `Operations`;
+DELETE FROM `Domaine`;
 DELETE FROM `Theme`;
 DELETE FROM `SousTheme`;
 DELETE FROM `Formation`;
@@ -51,16 +51,7 @@ VALUES('STINF00003', 'Amazon Web Services', 'Formations Amazon Web Services', 3)
 
 -- TypeUtilisateur
 INSERT INTO TypeUtilisateur (nom, `description`) 
-VALUES ('Administrateur', "Administrateur de l'application");
-
-INSERT INTO TypeUtilisateur (nom, `description`) 
-VALUES ('RESPONSABLE CATALOGUE', 'Responsable du catalogue de formation');
-
-INSERT INTO TypeUtilisateur (nom, `description`) 
-VALUES ('RESPONSABLE FORMATION', "Responsable de la planification des formation et de l'attribution des salles");
-
-INSERT INTO TypeUtilisateur (nom, `description`) 
-VALUES ('RESPONSABLE LOGISTIQUE', "Responsable de la logistique, mise à disposition et préparation des salles et outils");
+VALUES ('Responsable', "Responsable ayant un certain niveau d'exploitation sur l'application");
 
 INSERT INTO TypeUtilisateur (nom, `description`) 
 VALUES ('APPRENANT', "Client devant consommer des produits ou formations du site");
@@ -75,23 +66,23 @@ VALUES ('USER0001', 'sado', 'frazer','','frazer@frazer.fr',NULL,'','','','ACTIVE
 
 INSERT INTO Utilisateur (codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, certifications, dernierDiplome,
 statut, `login`, `password`, societe, idTypeUser) 
-VALUES ('USER0002', 'Michel', 'Bouari','','michel@michel.com',NULL,'','','','ACTIVE','b.michel','michel@123', 'IT TRAINING', 2);
+VALUES ('USER0002', 'Michel', 'Bouari','','michel@michel.com',NULL,'','','','ACTIVE','b.michel','michel@123', 'IT TRAINING', 1);
 
 INSERT INTO Utilisateur (codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, certifications, dernierDiplome,
 statut, `login`, `password`, societe, idTypeUser) 
-VALUES ('USER0003', 'Guillaume', 'TSAGUE','','tsague@tsague.net',NULL,'','','','ACTIVE','t.guillaume','guillaume@123', 'IT TRAINING', 3);
+VALUES ('USER0003', 'Guillaume', 'TSAGUE','','tsague@tsague.net',NULL,'','','','ACTIVE','t.guillaume','guillaume@123', 'IT TRAINING', 1);
 
 INSERT INTO Utilisateur (codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, certifications, dernierDiplome,
 statut, `login`, `password`, societe, idTypeUser) 
-VALUES ('USER0004', 'jean', 'LAPORTE','','jean@jean.cm',NULL,'','','','ACTIVE','l.jean','jean@123', 'IT TRAINING', 4);
+VALUES ('USER0004', 'jean', 'LAPORTE','','jean@jean.cm',NULL,'','','','ACTIVE','l.jean','jean@123', 'IT TRAINING', 1);
 
 INSERT INTO Utilisateur (codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, certifications, dernierDiplome,
 statut, `login`, `password`, societe, idTypeUser) 
-VALUES ('USER0005', 'Mathieu', 'NGASSA','+331789900','test@test.com',STR_TO_DATE('10-May-2005', '%d-%M-%Y'),'244434555','','BAC +2','ACTIVE','n.mathieu','mathieu@123', 'GLOB CONSULTING', 5);
+VALUES ('USER0005', 'Mathieu', 'NGASSA','+331789900','test@test.com',STR_TO_DATE('10-May-2005', '%d-%M-%Y'),'244434555','','BAC +2','ACTIVE','n.mathieu','mathieu@123', 'GLOB CONSULTING', 2);
 
 INSERT INTO Utilisateur (codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, certifications, dernierDiplome,
 statut, `login`, `password`, societe, idTypeUser) 
-VALUES ('USER0006', 'Etienne', 'CASSIN','','etienne@etienne.com',NULL,'','','JAVA Certified','ACTIVE','c.etienne','etienne@123', 'Dreams', 6);
+VALUES ('USER0006', 'Etienne', 'CASSIN','','etienne@etienne.com',NULL,'','','JAVA Certified','ACTIVE','c.etienne','etienne@123', 'Dreams', 3);
 
 -- Formation
 INSERT INTO Formation (codeFormation, nom,`description`, idStheme, idRespCat) 
