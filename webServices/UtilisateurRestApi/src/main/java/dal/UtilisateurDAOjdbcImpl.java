@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import bo.Utilisateur;
 
 
@@ -35,7 +36,8 @@ public class UtilisateurDAOjdbcImpl implements UtilisateurDAO{
 				utilisateur.setLogin(rs.getString("login"));
 				utilisateur.setPassword(rs.getString("password"));
 				utilisateur.setSociete(rs.getString("societe"));
-				
+				utilisateur.setStatut(rs.getString("statut"));
+
 				Date dateNaiss = rs.getDate("dateNaiss");
 				if (dateNaiss != null) {
 					utilisateur.setDateNaiss(dateNaiss.toLocalDate());
@@ -59,6 +61,7 @@ public List<Utilisateur> selectAll() {
 		ResultSet rs = ps.executeQuery();
 		
 		while (rs.next()) {
+		
 			Utilisateur utilisateur = new Utilisateur();
 			utilisateur.setIdUtilisateur(rs.getInt("idUtilisateur"));
 			utilisateur.setCodeUser(rs.getString("codeUser"));
@@ -66,11 +69,12 @@ public List<Utilisateur> selectAll() {
 			utilisateur.setPrenom(rs.getString("prenom"));
 			utilisateur.setTelephone(rs.getString("telephone"));
 			utilisateur.setEmail(rs.getString("email"));
-		//	utilisateur.setDateNaiss(rs.getDate("dateNaiss").toLocalDate());
 			utilisateur.setNumeroSiret(rs.getString("numeroSiret"));
 			utilisateur.setLogin(rs.getString("login"));
 			utilisateur.setPassword(rs.getString("password"));
 			utilisateur.setSociete(rs.getString("societe"));
+			utilisateur.setStatut(rs.getString("statut"));
+
 			
 			Date dateNaiss = rs.getDate("dateNaiss");
 			if (dateNaiss != null) {
@@ -90,7 +94,7 @@ public void insert(Utilisateur utilisateur) {
 	Connection cnx = ConnectionProvider.getConnection();
 	PreparedStatement ps;
 	try {
-		ps = cnx.prepareStatement("INSERT INTO Utilisateur (codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, login, password, societe) VALUES (?,?,?,?,?,?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
+		ps = cnx.prepareStatement("INSERT INTO Utilisateur (codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, login, password, societe, statut  ) VALUES (?,?,?,?,?,?,?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
 	
 		ps.setString(1, utilisateur.getCodeUser());
 		ps.setString(2, utilisateur.getNom());
@@ -101,6 +105,8 @@ public void insert(Utilisateur utilisateur) {
 		ps.setString(8, utilisateur.getLogin());
 		ps.setString(9, utilisateur.getPassword());
 		ps.setString(10, utilisateur.getSociete());
+		ps.setString(11, utilisateur.getStatut());
+
 		ps.setDate(6, Date.valueOf(utilisateur.getDateNaiss()));
 		if (utilisateur.getDateNaiss() != null) {
 			ps.setDate(6, Date.valueOf(utilisateur.getDateNaiss()));
@@ -123,7 +129,7 @@ public void update(Utilisateur utilisateur) {
 	Connection cnx = ConnectionProvider.getConnection();
 	PreparedStatement ps;
 	try {
-		ps = cnx.prepareStatement("UPDATE Utilisateur SET codeUser = ?, nom = ?, prenom = ?, telephone = ?, email = ?, dateNaiss = ?, numeroSiret = ?, login = ?, password = ?, societe = ? WHERE idUtilisateur = ?");
+		ps = cnx.prepareStatement("UPDATE Utilisateur SET codeUser = ?, nom = ?, prenom = ?, telephone = ?, email = ?, dateNaiss = ?, numeroSiret = ?, login = ?, password = ?, societe = ?, statut = ? WHERE idUtilisateur = ?");
 	
 		ps.setString(1, utilisateur.getCodeUser());
 		ps.setString(2, utilisateur.getNom());
@@ -134,6 +140,8 @@ public void update(Utilisateur utilisateur) {
 		ps.setString(8, utilisateur.getLogin());
 		ps.setString(9, utilisateur.getPassword());
 		ps.setString(10, utilisateur.getSociete());
+		ps.setString(11, utilisateur.getStatut());
+
 		if (utilisateur.getDateNaiss() != null) {
 			ps.setDate(6, Date.valueOf(utilisateur.getDateNaiss()));
 		} else {
