@@ -1,10 +1,10 @@
-package formation.stheme.dal;
+package formation.dal.stheme;
 import java.util.List;
 
 import formation.bo.SousTheme;
 import formation.bo.Theme;
 import formation.dal.ConnectionProvider;
-import formation.theme.dal.ThemeJdbcImpl;
+import formation.dal.theme.ThemeJdbcImpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,14 +21,14 @@ public class SthemeJdbcImpl implements SthemeDAO{
 		SousTheme stheme = null;
 		Connection cnx = ConnectionProvider.getConnection();
 		try {
-			PreparedStatement ps = cnx.prepareStatement("SELECT * FROM SousTheme WHERE id = ?");
+			PreparedStatement ps = cnx.prepareStatement("SELECT * FROM SousTheme WHERE idStheme = ?");
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
 				stheme = new SousTheme();
 				stheme.setIdStheme(rs.getInt("idStheme"));
 				stheme.setCodeStheme(rs.getString("codeSthem"));
-				stheme.setCodeStheme(rs.getString("nom"));
+				stheme.setNom(rs.getString("nom"));
 				stheme.setDescription(rs.getString("description"));
 				if (rs.getInt("idTheme")>0) {
 					stheme.setTheme(themeBll.getThemeById(rs.getInt("idTheme")));

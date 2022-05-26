@@ -1,4 +1,4 @@
-package formation.theme.dal;
+package formation.dal.theme;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,10 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import formation.domaine.dal.DomaineJdbcImpl;
+
 import formation.bo.Domaine;
 import formation.bo.Theme;
 import formation.dal.ConnectionProvider;
+import formation.dal.domaine.DomaineJdbcImpl;
 
 public class ThemeJdbcImpl implements ThemeDAO{
 
@@ -19,7 +20,7 @@ public class ThemeJdbcImpl implements ThemeDAO{
 		Theme theme = null;
 		Connection cnx = ConnectionProvider.getConnection();
 		try {
-			PreparedStatement ps = cnx.prepareStatement("SELECT * FROM postits WHERE id = ?");
+			PreparedStatement ps = cnx.prepareStatement("SELECT * FROM Theme WHERE idTheme = ?");
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {

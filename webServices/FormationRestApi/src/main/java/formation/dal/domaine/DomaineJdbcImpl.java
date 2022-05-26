@@ -1,4 +1,4 @@
-package formation.domaine.dal;
+package formation.dal.domaine;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,7 +18,7 @@ public class DomaineJdbcImpl implements DomaineDAO {
 		Domaine domaine = null;
 		Connection cnx = ConnectionProvider.getConnection();
 		try {
-			PreparedStatement ps = cnx.prepareStatement("SELECT * FROM Domaine WHERE id = ?");
+			PreparedStatement ps = cnx.prepareStatement("SELECT * FROM Domaine WHERE idDomaine = ?");
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
@@ -48,7 +48,7 @@ public class DomaineJdbcImpl implements DomaineDAO {
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
 				int idDomaine = rs.getInt("iddomaine");
-				String codeDom = rs.getString("codeSthem");
+				String codeDom = rs.getString("codeDom");
 				String nom = rs.getString("nom");
 				String description = rs.getString("description");
 				domaines.add(new Domaine(idDomaine, codeDom, nom, description));

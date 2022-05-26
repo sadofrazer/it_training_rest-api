@@ -1,4 +1,4 @@
-package formation.stheme.dal;
+package formation.dal.stheme;
 
 import java.util.List;
 

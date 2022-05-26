@@ -22,6 +22,16 @@ public class Formation {
 		this.stheme = stheme;
 		this.idRespCat = idRespCat;
 	}
+	
+	public Formation(String codeForm, String nom, String description, SousTheme stheme,
+			int idRespCat) {
+		super();
+		this.codeForm = codeForm;
+		this.nom = nom;
+		this.description = description;
+		this.stheme = stheme;
+		this.idRespCat = idRespCat;
+	}
 
 	public int getIdFormation() {
 		return idFormation;

@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import formation.bo.Formation;
 import formation.bo.SousTheme;
-import formation.stheme.dal.SthemeJdbcImpl;
+import formation.dal.stheme.SthemeJdbcImpl;
 
 public class FormationJdbcImpl {
 	
@@ -17,6 +17,36 @@ public class FormationJdbcImpl {
 	 * Méthode du module Formation permettant de retourner la formation correspondant à l'Id passé en paramètre
 	 */
 
+	public Formation getFormationByCode(String codeForm) {
+		
+		Formation formation = null;
+		SthemeJdbcImpl sthemeBll = new SthemeJdbcImpl();
+		
+		Connection cnx = ConnectionProvider.getConnection();
+		try {
+			PreparedStatement ps = cnx.prepareStatement("SELECT * FROM Formation WHERE codeFormation  = ?");
+			ps.setString(1, codeForm);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				formation = new Formation();
+				formation.setIdFormation(rs.getInt("idFormation"));
+				formation.setCodeForm(rs.getString("codeFormation"));
+				formation.setNom(rs.getString("nom"));
+				formation.setDescription(rs.getString("description"));
+				formation.setStheme(sthemeBll.getSthemeById(rs.getInt("idStheme")));
+				formation.setIdRespCat(rs.getInt("idRespCat"));
+
+			}else {
+				System.err.println("Aucune Formation correspondante au code :" + codeForm +" n'a été trouvé en base de données");
+			}
+			cnx.close();
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return formation;
+	}
+	
 	public Formation getFormationById(int id) {
 		
 		Formation formation = null;
@@ -126,7 +156,7 @@ public class FormationJdbcImpl {
 		
 		if (formation != null) {
 			try {
-				PreparedStatement ps = cnx.prepareStatement("UPDATE formations SET codeFormation=?, nom=?, description=?, idStheme=?, idRespCat=? WHERE id=?");
+				PreparedStatement ps = cnx.prepareStatement("UPDATE Formation SET codeFormation=?, nom=?, description=?, idStheme=?, idRespCat=? WHERE idFormation=?");
 				ps.setInt(6, formation.getIdFormation());
 				ps.setString(1, formation.getCodeForm());
 				ps.setString(2, formation.getNom());
@@ -157,18 +187,14 @@ public class FormationJdbcImpl {
 		Connection cnx = ConnectionProvider.getConnection();
 	
 		try {
-			PreparedStatement ps = cnx.prepareStatement("DELETE FROM Formation WHERE id=?");
+			PreparedStatement ps = cnx.prepareStatement("DELETE FROM Formation WHERE idFormation=?");
 			ps.setInt(1, id);
 			ps.executeUpdate();
 			cnx.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		if (!(idExist(id))){
-			return true;
-		}else {
-			return false;
-		}
+		return true;
 	}
 
 
@@ -180,10 +206,10 @@ public class FormationJdbcImpl {
 		Connection cnx = ConnectionProvider.getConnection();
 		try {
 			PreparedStatement ps = cnx.prepareStatement("SELECT  f.*, s.nom as NomStheme FROM Formation f, SousTheme s "
-					+ "WHERE (f.idStheme=s.idStheme and  CodeFormation LIKE '%?%' and f.nom LIKE '%?%' and s.nom LIKE '%?%')");
-			ps.setString(1, codeForm);
-			ps.setString(2, nomForm);
-			ps.setString(6, nomSthem);
+					+ "WHERE (f.idStheme=s.idStheme and  CodeFormation LIKE ? and f.nom LIKE ? and s.nom LIKE ?)");
+			ps.setString(1, "%"+codeForm+"%");
+			ps.setString(2, "%"+nomForm+"%");
+			ps.setString(3, "%"+nomSthem+"%");
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
 				int idFormation = rs.getInt("idFormation");
@@ -194,6 +220,7 @@ public class FormationJdbcImpl {
 				int idRespcat = rs.getInt("idRespcat");
 				formations.add(new Formation(idFormation, codeFormation, nom, description, stheme, idRespcat));
 			}
+			rs.close();
 			cnx.close();
 		} 
 		catch (SQLException e) {
@@ -206,6 +233,16 @@ public class FormationJdbcImpl {
 	public boolean idExist(int id) {
 		
 		if (getFormationById(id)!= null) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	public boolean codeExist(String codeForm) {
+		
+		if (getFormationByCode(codeForm)!= null) {
 			return true;
 		}
 		else {

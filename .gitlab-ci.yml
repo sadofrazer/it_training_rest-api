@@ -1,13 +1,150 @@
-# You can override the included template(s) by including variable overrides
-# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
-# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
-# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
-# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
-# Note that environment variables can be set in several places
-# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
+# IT TRAINING PIPELINE CI/CD To Build, Test and deploy our Rest Api
+
 stages:
-- test
-sast:
-  stage: test
-include:
-- template: Security/SAST.gitlab-ci.yml
+- build
+- Test
+- Push Image
+- Code Review
+- Clear Review
+- Deploy Prod
+
+variables:
+    IMAGE_NAME_FORMATION: "sadofrazer/ittraining_api_formation:${CI_COMMIT_REF_NAME}"
+    IMAGE_NAME_UTILISATEUR: "sadofrazer/ittraining_api_utilisateur:${CI_COMMIT_REF_NAME}"
+    IMAGE_NAME_LOGISTIQUE: "sadofrazer/ittraining_api_logistique:${CI_COMMIT_REF_NAME}"
+    IMAGE_NAME_DASHBOARD: "sadofrazer/ittraining_api_dashboard:${CI_COMMIT_REF_NAME}"
+    CONTAINER_NAME_FORMATION: "rest_api_formation"
+    CONTAINER_NAME_UTILISATEUR: "rest_api_utilisateur"
+    CONTAINER_NAME_LOGISTIQUE: "rest_api_logistique"
+    CONTAINER_NAME_DASHBOARD: "rest_api_dashboard"
+    PRODUCTION_HOST: "34.70.85.182"
+    REVIEW_PORT: $((5000 + RANDOM % 1000))
+
+
+image: docker:latest
+services:
+    - name: docker:dind
+      alias: docker-frazer
+
+build_dockerhub:
+    stage: build
+    script:
+        - docker build -t ${IMAGE_NAME} webServices/FormationRestApi/
+        - docker save ${IMAGE_NAME} > FormationRestApi_public.tar
+    artifacts:
+        paths:
+            - FormationRestApi_public.tar
+
+test_image:
+    stage: Test Image
+    script:
+        - echo 'Test Image'
+        - docker load < FormationRestApi_public.tar
+        - docker images
+        - docker stop $CONTAINER_NAME_FORMATION || true
+        - docker rm $CONTAINER_NAME_FORMATION || true
+        - docker run --name $CONTAINER_NAME_FORMATION -d -p 8081:8080 $IMAGE_NAME_FORMATION
+        - sleep 5
+        - apk --no-cache add curl
+        - curl http://docker-frazer:8081/FormationRestApi/rest/domaine | grep -iq "idDomaine"
+        - curl http://docker-frazer:8081/FormationRestApi/rest/theme | grep -iq "idTheme"
+        - curl http://docker-frazer:8081/FormationRestApi/rest/formation | grep -iq "idFormation"
+        - curl http://docker-frazer:8081/FormationRestApi/rest/domaine/1 | grep -iq "idFormation"
+        - echo "test OK"
+Release:
+    stage: Push Image
+    script:
+        - docker load < FormationRestApi_public.tar
+        - docker login -u sadofrazer -p ${PASSWORD}
+        - docker push ${IMAGE_NAME}
+        - docker logout
+        - docker rmi ${IMAGE_NAME}
+
+# FIN CI et DEBUT PHASES CD
+code review:
+    stage: Code Review
+    image: alpine
+    services:
+        - name: alpine
+          alias: alpine-frazer
+    before_script:
+      # Get ssh keys from target server and add them to known_hosts
+      - apk update
+      - 'which ssh-agent || ( apk add openssh-client )'
+      - eval $(ssh-agent -s)
+      - mkdir -p ~/.ssh
+      - chmod 700 ~/.ssh
+      - ssh-keyscan -p 22 -4 $PRODUCTION_HOST >> ~/.ssh/known_hosts
+      - chmod 644 ~/.ssh/known_hosts
+      # Add the private key defined in PRIVATE_KEY variable
+      - echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null 
+    script:
+    - echo "Deploying the system"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker stop $CONTAINER_NAME_FORMATION-${CI_COMMIT_REF_NAME} || true"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rm $CONTAINER_NAME_FORMATION-${CI_COMMIT_REF_NAME} || true"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi $IMAGE_NAME_FORMATION|| true"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name $CONTAINER_NAME_FORMATION-${CI_COMMIT_REF_NAME} -d -p $REVIEW_PORT:8080 $IMAGE_NAME_FORMATION"
+    environment: 
+        name: review_${CI_COMMIT_REF_NAME}
+        url: "http://${PRODUCTION_HOST}:${REVIEW_PORT}/FormationRestApi/rest/domaine"
+        on_stop: clear review
+    only:
+      - merge_requests
+
+clear review:
+    stage: Clear Review
+    image: alpine
+    services:
+        - name: alpine
+          alias: alpine-frazer
+    variables:
+        GIT_STRATEGY: none
+    before_script:
+      # Get ssh keys from target server and add them to known_hosts
+      - apk update
+      - 'which ssh-agent || ( apk add openssh-client )'
+      - eval $(ssh-agent -s)
+      - mkdir -p ~/.ssh
+      - chmod 700 ~/.ssh
+      - ssh-keyscan -p 22 -4 $PRODUCTION_HOST >> ~/.ssh/known_hosts
+      - chmod 644 ~/.ssh/known_hosts
+      # Add the private key defined in PRIVATE_KEY variable
+      - echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null 
+    script:
+    - echo "Removing review container on the system"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker stop $CONTAINER_NAME_FORMATION-${CI_COMMIT_REF_NAME} || true"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rm $CONTAINER_NAME_FORMATION-${CI_COMMIT_REF_NAME} || true"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi $IMAGE_NAME_FORMATION-${CI_COMMIT_REF_NAME} || true"
+    environment: 
+        name: review_${CI_COMMIT_REF_NAME}
+        action: stop
+    only:
+      - merge_requests
+    when: manual
+
+deploy:
+    stage: Deploy prod
+    image: alpine
+    services:
+        - name: alpine
+          alias: alpine-frazer
+    before_script:
+      # Get ssh keys from target server and add them to known_hosts
+      - apk update
+      - 'which ssh-agent || ( apk add openssh-client )'
+      - eval $(ssh-agent -s)
+      - mkdir -p ~/.ssh
+      - chmod 700 ~/.ssh
+      - ssh-keyscan -p 22 -4 $PRODUCTION_HOST >> ~/.ssh/known_hosts
+      - chmod 644 ~/.ssh/known_hosts
+      # Add the private key defined in PRIVATE_KEY variable
+      - echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null 
+    script:
+    - echo "Deploying API on prod env"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker stop $CONTAINER_NAME_FORMATION || true"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rm $CONTAINER_NAME_FORMATION || true"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi $IMAGE_NAME_FORMATION || true"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name $CONTAINER_NAME -d -p 8081:8080 $GITLAB_IMAGE_NAME"
+    environment: production
+    only:
+      - main

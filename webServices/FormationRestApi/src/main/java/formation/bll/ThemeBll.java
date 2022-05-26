@@ -3,8 +3,8 @@ package formation.bll;
 import java.util.List;
 
 import formation.bo.Theme;
-import formation.theme.dal.ThemeDAO;
-import formation.theme.dal.ThemeJdbcImpl;
+import formation.dal.theme.ThemeDAO;
+import formation.dal.theme.ThemeJdbcImpl;
 
 public class ThemeBll implements ThemeDAO {
 	private ThemeJdbcImpl dao;

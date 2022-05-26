@@ -1,4 +1,4 @@
-package formation.domaine.dal;
+package formation.dal.domaine;
 
 import java.util.List;
 
