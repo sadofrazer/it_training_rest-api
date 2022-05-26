@@ -46,10 +46,10 @@ test_image:
         - docker run --name $CONTAINER_NAME_FORMATION -d -p 8081:8080 $IMAGE_NAME_FORMATION
         - sleep 5
         - apk --no-cache add curl
-        - curl http://docker-frazer:8081/FormationRestApi/rest/domaine | grep -i "idDomaine"
-        - curl http://docker-frazer:8081/FormationRestApi/rest/theme | grep -i "idTheme"
-        - curl http://docker-frazer:8081/FormationRestApi/rest/formation | grep -i "idFormation"
-        - curl http://docker-frazer:8081/FormationRestApi/rest/domaine/1 | grep -i "idFormation"
+        - curl http://docker-frazer:8081/FormationRestApi/rest/domaine | grep -iq "idDomaine"
+        - curl http://docker-frazer:8081/FormationRestApi/rest/theme | grep -iq "idTheme"
+        - curl http://docker-frazer:8081/FormationRestApi/rest/formation | grep -iq "idFormation"
+        - curl http://docker-frazer:8081/FormationRestApi/rest/formation/1 | grep -iq "idFormation"
         - echo "test OK"
 Release:
     stage: Push Image
