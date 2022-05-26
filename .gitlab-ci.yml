@@ -2,7 +2,7 @@
 
 stages:
 - build
-- Test
+- Test Image
 - Push Image
 - Code Review
 - Clear Review
