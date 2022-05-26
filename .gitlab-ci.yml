@@ -29,8 +29,8 @@ services:
 build_dockerhub:
     stage: build
     script:
-        - docker build -t ${IMAGE_NAME} webServices/FormationRestApi/
-        - docker save ${IMAGE_NAME} > FormationRestApi_public.tar
+        - docker build -t ${IMAGE_NAME_FORMATION} webServices/FormationRestApi/
+        - docker save ${IMAGE_NAME_FORMATION} > FormationRestApi_public.tar
     artifacts:
         paths:
             - FormationRestApi_public.tar
@@ -56,9 +56,9 @@ Release:
     script:
         - docker load < FormationRestApi_public.tar
         - docker login -u sadofrazer -p ${PASSWORD}
-        - docker push ${IMAGE_NAME}
+        - docker push ${IMAGE_NAME_FORMATION}
         - docker logout
-        - docker rmi ${IMAGE_NAME}
+        - docker rmi ${IMAGE_NAME_FORMATION}
 
 # FIN CI et DEBUT PHASES CD
 code review:
@@ -144,7 +144,7 @@ deploy:
     - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker stop $CONTAINER_NAME_FORMATION || true"
     - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rm $CONTAINER_NAME_FORMATION || true"
     - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi $IMAGE_NAME_FORMATION || true"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name $CONTAINER_NAME -d -p 8081:8080 $GITLAB_IMAGE_NAME"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name $CONTAINER_NAME_FORMATION -d -p 8081:8080 $IMAGE_NAME_FORMATION"
     environment: production
     only:
       - main
