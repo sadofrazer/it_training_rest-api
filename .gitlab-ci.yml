@@ -43,8 +43,7 @@ test_image:
         - echo 'Test Image'
         - docker load < FormationRestApi_public.tar
         - docker images
-        - docker stop $(docker ps -a | grep -i "rest_api" | awk '{print $NF}') || true
-        - docker rm $(docker ps -a | grep -i "rest_api" | awk '{print $NF}') || true
+        - sh del_containers.sh
         - docker run --name $CONTAINER_NAME_FORMATION -d -p 8081:8080 $IMAGE_NAME_FORMATION
         - sleep 5
         - apk --no-cache add curl
@@ -63,7 +62,8 @@ Release:
         - docker login -u sadofrazer -p ${PASSWORD}
         - docker push ${IMAGE_NAME_FORMATION}
         - docker logout
-        - docker rmi ${IMAGE_NAME_FORMATION}
+        - sh del_containers.sh
+        - docker system prune -af
     rules:
         - if: ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")
 
@@ -87,8 +87,8 @@ code review:
       - echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null 
     script:
     - echo "Deploying the system"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker stop $(docker ps -a | grep -i "rest_api" | awk '{print $NF}') || true"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rm $(docker ps -a | grep -i "rest_api" | awk '{print $NF}') || true"
+    - scp del_containers.sh sadofrazer@$PRODUCTION_HOST:/home/sadofrazer/del_containers.sh 
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "sh /home/sadofrazer/del_containers.sh"
     - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi $IMAGE_NAME_FORMATION || true"
     - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name $CONTAINER_NAME_FORMATION-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID} -d -p $REVIEW_PORT:8080 $IMAGE_NAME_FORMATION"
     environment: 
@@ -119,9 +119,8 @@ clear review:
       - echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null 
     script:
     - echo "Removing review container on the system"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker stop $(docker ps -a | grep -i "rest_api" | awk '{print $NF}') || true"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rm $(docker ps -a | grep -i "rest_api" | awk '{print $NF}') || true"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi $IMAGE_NAME_FORMATION-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID} || true"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "sh /home/sadofrazer/del_containers.sh"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker system prune -af || true"
     environment: 
         name: review_${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID}
         action: stop
@@ -148,9 +147,9 @@ deploy:
       - echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null 
     script:
     - echo "Deploying API on prod env"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker stop $(docker ps -a | grep -i "rest_api" | awk '{print $NF}') || true"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rm $(docker ps -a | grep -i "rest_api" | awk '{print $NF}') || true"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi ${IMAGE_NAME_FORMATION} || true"
+    - scp del_containers.sh sadofrazer@$PRODUCTION_HOST:/home/sadofrazer/del_containers.sh 
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "sh /home/sadofrazer/del_containers.sh"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker system prune -af || true"
     - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name $CONTAINER_NAME_FORMATION -d -p 8081:8080 ${IMAGE_NAME_FORMATION}"
     environment: production
     only:
