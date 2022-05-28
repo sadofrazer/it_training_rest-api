@@ -31,6 +31,8 @@ build_dockerhub:
     script:
         - docker build -t ${IMAGE_NAME_FORMATION} webServices/FormationRestApi/
         - docker save ${IMAGE_NAME_FORMATION} > FormationRestApi_public.tar
+    rules:
+        - if: ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")
     artifacts:
         paths:
             - FormationRestApi_public.tar
@@ -51,6 +53,9 @@ test_image:
         - curl http://docker-frazer:8081/FormationRestApi/rest/formation | grep -iq "idFormation"
         - curl http://docker-frazer:8081/FormationRestApi/rest/formation/1 | grep -iq "idFormation"
         - echo "test OK"
+    rules:
+        - if: ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")
+
 Release:
     stage: Push Image
     script:
@@ -59,6 +64,8 @@ Release:
         - docker push ${IMAGE_NAME_FORMATION}
         - docker logout
         - docker rmi ${IMAGE_NAME_FORMATION}
+    rules:
+        - if: ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")
 
 # FIN CI et DEBUT PHASES CD
 code review:
