@@ -98,6 +98,7 @@ CREATE TABLE `Formation` (
   `codeFormation` varchar(10) not null UNIQUE,
   `nom` varchar(250) not null,
   `description` varchar(250),
+  `nbreJrs` int not null,
   `idStheme` int not null,
   `idRespCat` int not null
 );
@@ -262,17 +263,17 @@ INSERT INTO Domaine (codeDom, nom,`description`)
 VALUES('DINF00002', 'Gouvernance Informatiques', 'Domaine traitant du management, la stratégie et les gestion des projets TIC' );
 
 INSERT INTO Domaine (codeDom, nom,`description`) 
-VALUES('DINF00003', 'Gouvernance Informatiques', 'Domaine traitant du management, la stratégie et les gestion des projets TIC' );
+VALUES('DINF00003', 'Bureautique', "Domaine traitant des outils informatiques d'aide à la Bureautique" );
 
 -- Themes
 INSERT INTO Theme (codeTheme, nom,`description`, idDomaine) 
 VALUES('TINF00001','Les frameworks web', 'Apprendre à développer des application web complètes... Dev FULLSTACK', 1);
 
 INSERT INTO Theme (codeTheme, nom,`description`, idDomaine) 
-VALUES('TINF00002','Devops, Industrialisation et gestion de la production', 'Formations DevOps, industrialisation et gestion de la production', 2);
+VALUES('TINF00002','Devops, Industrialisation et gestion de la production', 'Formations DevOps, industrialisation et gestion de la production', 1);
 
 INSERT INTO Theme (codeTheme, nom,`description`, idDomaine) 
-VALUES('TINF00003','Cloud computing', 'Formations Cloud computing', 3);
+VALUES('TINF00003','Cloud computing', 'Formations Cloud computing', 1);
 
 -- SousThemes
 INSERT INTO SousTheme (codeSthem, nom,`description`, idTheme) 
@@ -320,17 +321,17 @@ statut, `login`, `password`, societe, idTypeUser)
 VALUES ('USER0006', 'Etienne', 'CASSIN','','etienne@etienne.com',NULL,'','','JAVA Certified','ACTIVE','c.etienne','etienne@123', 'Dreams', 3);
 
 -- Formation
-INSERT INTO Formation (codeFormation, nom,`description`, idStheme, idRespCat) 
+INSERT INTO Formation (codeFormation, nom,`description`, `nbreJrs`, idStheme, idRespCat) 
 VALUES("FOR00001", "Conception d'interfaces graphiques full JavaScript avec Angular, TypeScript et Bootstrap",
-"Formation Conception d'interfaces graphiques full JavaScript avec Angular, TypeScript et Bootstrap", 1, 2);
+"Formation Conception d'interfaces graphiques full JavaScript avec Angular, TypeScript et Bootstrap",3, 1, 2);
 
-INSERT INTO Formation (codeFormation, nom,`description`, idStheme, idRespCat) 
+INSERT INTO Formation (codeFormation, nom,`description`,`nbreJrs`, idStheme, idRespCat) 
 VALUES("FOR00002", "Gitlab CI/CD",
-"Bien démarrer sur la plate-forme DevOps complète GitLab", 2, 2);
+"Bien démarrer sur la plate-forme DevOps complète GitLab",3, 2, 2);
 
-INSERT INTO Formation (codeFormation, nom,`description`, idStheme, idRespCat) 
+INSERT INTO Formation (codeFormation, nom,`description`,`nbreJrs`, idStheme, idRespCat) 
 VALUES("FOR00003", "Amazon Web Services (AWS) - Architecture avancé",
-"Amazon Web Services (AWS) - Architecture avancée; Concevoir des solutions complexes" , 3, 2);
+"Amazon Web Services (AWS) - Architecture avancée; Concevoir des solutions complexes" ,3, 3, 2);
 
 -- Salle
 INSERT INTO Salle (codeSalle, adresse, nomSalle, nbrePlaces, statut) 

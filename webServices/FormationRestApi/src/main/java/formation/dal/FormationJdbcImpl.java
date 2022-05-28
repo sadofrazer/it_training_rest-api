@@ -33,6 +33,7 @@ public class FormationJdbcImpl {
 				formation.setCodeForm(rs.getString("codeFormation"));
 				formation.setNom(rs.getString("nom"));
 				formation.setDescription(rs.getString("description"));
+				formation.setNbreJrs(rs.getInt("nbreJrs"));
 				formation.setStheme(sthemeBll.getSthemeById(rs.getInt("idStheme")));
 				formation.setIdRespCat(rs.getInt("idRespCat"));
 
@@ -63,6 +64,7 @@ public class FormationJdbcImpl {
 				formation.setCodeForm(rs.getString("codeFormation"));
 				formation.setNom(rs.getString("nom"));
 				formation.setDescription(rs.getString("description"));
+				formation.setNbreJrs(rs.getInt("nbreJrs"));
 				formation.setStheme(sthemeBll.getSthemeById(rs.getInt("idStheme")));
 				formation.setIdRespCat(rs.getInt("idRespCat"));
 
@@ -97,9 +99,40 @@ public class FormationJdbcImpl {
 				String codeFormation = rs.getString("codeFormation");
 				String nom = rs.getString("nom");
 				String description = rs.getString("description");
+				int nbreJrs = rs.getInt("nbreJrs");
 				SousTheme stheme = sthemeBll.getSthemeById(rs.getInt("idStheme"));
 				int idRespcat = rs.getInt("idRespcat");
-				formations.add(new Formation(idFormation, codeFormation, nom, description, stheme, idRespcat));
+				formations.add(new Formation(idFormation, codeFormation, nom, description,nbreJrs, stheme, idRespcat));
+			}
+			cnx.close();
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return formations;
+	}
+	
+	public List<Formation> getAllOrderBy(String order) {
+		
+		SthemeJdbcImpl sthemeBll = new SthemeJdbcImpl();
+		List<Formation> formations = new ArrayList<Formation>();
+		
+		Connection cnx = ConnectionProvider.getConnection();
+		try {
+			PreparedStatement ps = cnx.prepareStatement("SELECT f.*, s.nom as nomStheme FROM Formation f, SousTheme s WHERE (f.idStheme=s.idStheme) ORDER BY " + order);
+			//PreparedStatement ps = cnx.prepareStatement("SELECT f.*, s.nom as nomStheme FROM Formation f, SousTheme s WHERE (f.idStheme=s.idStheme) ORDER BY ?");
+			//ps.setString(1, "order");
+			System.out.println("Valeur utilisée pour exécution de la requete : " + order);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				int idFormation = rs.getInt("idFormation");
+				String codeFormation = rs.getString("codeFormation");
+				String nom = rs.getString("nom");
+				String description = rs.getString("description");
+				int nbreJrs = rs.getInt("nbreJrs");
+				SousTheme stheme = sthemeBll.getSthemeById(rs.getInt("idStheme"));
+				int idRespcat = rs.getInt("idRespcat");
+				formations.add(new Formation(idFormation, codeFormation, nom, description,nbreJrs, stheme, idRespcat));
 			}
 			cnx.close();
 		} 
@@ -121,13 +154,14 @@ public class FormationJdbcImpl {
 		
 		if (formation != null) {
 			try {
-				PreparedStatement ps = cnx.prepareStatement("INSERT INTO Formation (codeFormation, nom, description, idStheme, idRespCat)"
-						+ " VALUES (?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
+				PreparedStatement ps = cnx.prepareStatement("INSERT INTO Formation (codeFormation, nom, description,nbreJrs, idStheme, idRespCat)"
+						+ " VALUES (?,?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
 				ps.setString(1, formation.getCodeForm());
 				ps.setString(2, formation.getNom());
 				ps.setString(3, formation.getDescription());
-				ps.setInt(4, formation.getStheme().getIdStheme());
-				ps.setInt(5, formation.getIdRespCat());
+				ps.setInt(4, formation.getNbreJrs());
+				ps.setInt(5, formation.getStheme().getIdStheme());
+				ps.setInt(6, formation.getIdRespCat());
 				ps.executeUpdate();
 				ResultSet rs = ps.getGeneratedKeys();
 				if(rs.next()) {
@@ -156,13 +190,14 @@ public class FormationJdbcImpl {
 		
 		if (formation != null) {
 			try {
-				PreparedStatement ps = cnx.prepareStatement("UPDATE Formation SET codeFormation=?, nom=?, description=?, idStheme=?, idRespCat=? WHERE idFormation=?");
-				ps.setInt(6, formation.getIdFormation());
+				PreparedStatement ps = cnx.prepareStatement("UPDATE Formation SET codeFormation=?, nom=?, description=?, nbreJrs=?, idStheme=?, idRespCat=? WHERE idFormation=?");
+				ps.setInt(7, formation.getIdFormation());
 				ps.setString(1, formation.getCodeForm());
 				ps.setString(2, formation.getNom());
 				ps.setString(3, formation.getDescription());
-				ps.setInt(4, formation.getStheme().getIdStheme());
-				ps.setInt(5, formation.getIdRespCat());
+				ps.setInt(4, formation.getNbreJrs());
+				ps.setInt(5, formation.getStheme().getIdStheme());
+				ps.setInt(6, formation.getIdRespCat());
 				ps.executeUpdate();
 				cnx.close();
 			} catch (SQLException e) {
@@ -198,27 +233,28 @@ public class FormationJdbcImpl {
 	}
 
 
-	public List<Formation> searchByParams(String codeForm, String nomForm, String nomSthem) {
+	public List<Formation> searchByParams(String codeForm, String nomForm, String nomStheme) {
 		
 		SthemeJdbcImpl sthemeBll = new SthemeJdbcImpl();
 		List<Formation> formations = new ArrayList<Formation>();
 		
 		Connection cnx = ConnectionProvider.getConnection();
 		try {
-			PreparedStatement ps = cnx.prepareStatement("SELECT  f.*, s.nom as NomStheme FROM Formation f, SousTheme s "
+			PreparedStatement ps = cnx.prepareStatement("SELECT  f.*, s.nom as nomStheme FROM Formation f, SousTheme s "
 					+ "WHERE (f.idStheme=s.idStheme and  CodeFormation LIKE ? and f.nom LIKE ? and s.nom LIKE ?)");
 			ps.setString(1, "%"+codeForm+"%");
 			ps.setString(2, "%"+nomForm+"%");
-			ps.setString(3, "%"+nomSthem+"%");
+			ps.setString(3, "%"+nomStheme+"%");
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
 				int idFormation = rs.getInt("idFormation");
 				String codeFormation = rs.getString("codeFormation");
 				String nom = rs.getString("nom");
 				String description = rs.getString("description");
+				int nbreJrs = rs.getInt("nbreJrs");
 				SousTheme stheme = sthemeBll.getSthemeById(rs.getInt("idStheme"));
 				int idRespcat = rs.getInt("idRespcat");
-				formations.add(new Formation(idFormation, codeFormation, nom, description, stheme, idRespcat));
+				formations.add(new Formation(idFormation, codeFormation, nom, description,nbreJrs, stheme, idRespcat));
 			}
 			rs.close();
 			cnx.close();

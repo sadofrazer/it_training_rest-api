@@ -27,11 +27,31 @@ public class FormationBll implements FormationDAO {
 	public List<Formation> selectAllFormations() {
 		return dao.selectAllFormations();
 	}
+	
+	public List<Formation> getAllOrderBy(String order) {
+		System.out.println("valeur si initiale " + order);
+		if(order!=null) {
+			if("codeForm".equals(order) || "code".equals(order)) {
+				order = "codeFormation";
+				return dao.getAllOrderBy(order);
+			}
+			if("nomForm".equals(order) || "nom".equals(order)) {
+				order = "nom";
+				return dao.getAllOrderBy(order);
+			}
+			if("stheme".equals(order) || "theme".equals(order)) {
+				order = "nomStheme";
+				return dao.getAllOrderBy(order);
+			}
+		}
+			
+		return dao.getAllOrderBy("nom");	
+	}
 
 	@Override
 	public boolean insertFormation(Formation formation) {
 		
-		if(formation.getIdRespCat()!=0 && formation.getStheme()!=null && formation.getCodeForm()!=null && !dao.codeExist(formation.getCodeForm())) {
+		if(formation.getIdRespCat()>0 && formation.getStheme()!=null && formation.getCodeForm()!=null && formation.getNbreJrs()>0 && !dao.codeExist(formation.getCodeForm())) {
 			return dao.insertFormation(formation);
 			//return true;
 		}else {
@@ -42,8 +62,10 @@ public class FormationBll implements FormationDAO {
 
 	@Override
 	public boolean updateFormation(Formation formation) {
+		
 		//System.out.println(formation.getIdRespCat() +"    " + formation.getStheme().getIdStheme() + "     " +formation.getCodeForm());
-		if(formation.getIdRespCat()!=0 && formation.getStheme()!=null && formation.getCodeForm()!=null) {
+		
+		if(formation.getIdRespCat()>0 && formation.getStheme()!=null && formation.getCodeForm()!=null && formation.getNbreJrs()>0 && formation.getIdRespCat()>0) {
 			return dao.updateFormation(formation);
 		}else {
 			System.err.println("Impossible de modifier cette formation d'Id : " + formation.getIdFormation());
@@ -78,6 +100,11 @@ public class FormationBll implements FormationDAO {
 		}else {
 			return false;
 		}
+	}
+	
+	public boolean codeExist(String codeForm) {
+		
+		return dao.codeExist(codeForm);
 	}
 
 }

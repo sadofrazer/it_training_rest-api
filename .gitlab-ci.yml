@@ -9,10 +9,10 @@ stages:
 - Deploy Prod
 
 variables:
-    IMAGE_NAME_FORMATION: "sadofrazer/ittraining_api_formation:${CI_COMMIT_REF_NAME}"
-    IMAGE_NAME_UTILISATEUR: "sadofrazer/ittraining_api_utilisateur:${CI_COMMIT_REF_NAME}"
-    IMAGE_NAME_LOGISTIQUE: "sadofrazer/ittraining_api_logistique:${CI_COMMIT_REF_NAME}"
-    IMAGE_NAME_DASHBOARD: "sadofrazer/ittraining_api_dashboard:${CI_COMMIT_REF_NAME}"
+    IMAGE_NAME_FORMATION: "sadofrazer/ittraining_api_formation:${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID}"
+    IMAGE_NAME_UTILISATEUR: "sadofrazer/ittraining_api_utilisateur:${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID}"
+    IMAGE_NAME_LOGISTIQUE: "sadofrazer/ittraining_api_logistique:${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID}"
+    IMAGE_NAME_DASHBOARD: "sadofrazer/ittraining_api_dashboard:${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID}"
     CONTAINER_NAME_FORMATION: "rest_api_formation"
     CONTAINER_NAME_UTILISATEUR: "rest_api_utilisateur"
     CONTAINER_NAME_LOGISTIQUE: "rest_api_logistique"
@@ -80,12 +80,12 @@ code review:
       - echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null 
     script:
     - echo "Deploying the system"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker stop $CONTAINER_NAME_FORMATION-${CI_COMMIT_REF_NAME} || true"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rm $CONTAINER_NAME_FORMATION-${CI_COMMIT_REF_NAME} || true"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker stop $CONTAINER_NAME_FORMATION-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID} || true"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rm $CONTAINER_NAME_FORMATION-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID} || true"
     - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi $IMAGE_NAME_FORMATION|| true"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name $CONTAINER_NAME_FORMATION-${CI_COMMIT_REF_NAME} -d -p $REVIEW_PORT:8080 $IMAGE_NAME_FORMATION"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name $CONTAINER_NAME_FORMATION-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID} -d -p $REVIEW_PORT:8080 $IMAGE_NAME_FORMATION"
     environment: 
-        name: review_${CI_COMMIT_REF_NAME}
+        name: review_${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID}
         url: "http://${PRODUCTION_HOST}:${REVIEW_PORT}/FormationRestApi/rest/domaine"
         on_stop: clear review
     only:
@@ -112,15 +112,15 @@ clear review:
       - echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null 
     script:
     - echo "Removing review container on the system"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker stop $CONTAINER_NAME_FORMATION-${CI_COMMIT_REF_NAME} || true"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rm $CONTAINER_NAME_FORMATION-${CI_COMMIT_REF_NAME} || true"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi $IMAGE_NAME_FORMATION-${CI_COMMIT_REF_NAME} || true"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker stop $CONTAINER_NAME_FORMATION-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID} || true"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rm $CONTAINER_NAME_FORMATION-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID} || true"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi $IMAGE_NAME_FORMATION-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID} || true"
     environment: 
-        name: review_${CI_COMMIT_REF_NAME}
+        name: review_${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID}
         action: stop
     only:
       - merge_requests
-    when: manual
+    #when: manual
 
 deploy:
     stage: Deploy Prod
@@ -143,8 +143,8 @@ deploy:
     - echo "Deploying API on prod env"
     - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker stop $CONTAINER_NAME_FORMATION || true"
     - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rm $CONTAINER_NAME_FORMATION || true"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi $IMAGE_NAME_FORMATION || true"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name $CONTAINER_NAME_FORMATION -d -p 8081:8080 $IMAGE_NAME_FORMATION"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi ${IMAGE_NAME_FORMATION} || true"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name $CONTAINER_NAME_FORMATION -d -p 8081:8080 ${IMAGE_NAME_FORMATION}"
     environment: production
     only:
       - main

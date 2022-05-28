@@ -5,6 +5,7 @@ public class Formation {
 	private String codeForm;
 	private String nom;
 	private String description;
+	private int nbreJrs;
 	private SousTheme stheme;
 	private int idRespCat;
 	
@@ -12,23 +13,25 @@ public class Formation {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Formation(int idFormation, String codeForm, String nom, String description, SousTheme stheme,
+	public Formation(int idFormation, String codeForm, String nom, String description,int nbrejrs, SousTheme stheme,
 			int idRespCat) {
 		super();
 		this.idFormation = idFormation;
 		this.codeForm = codeForm;
 		this.nom = nom;
 		this.description = description;
+		this.nbreJrs=nbrejrs;
 		this.stheme = stheme;
 		this.idRespCat = idRespCat;
 	}
 	
-	public Formation(String codeForm, String nom, String description, SousTheme stheme,
+	public Formation(String codeForm, String nom, String description,int nbrejrs, SousTheme stheme,
 			int idRespCat) {
 		super();
 		this.codeForm = codeForm;
 		this.nom = nom;
 		this.description = description;
+		this.nbreJrs=nbrejrs;
 		this.stheme = stheme;
 		this.idRespCat = idRespCat;
 	}
@@ -79,6 +82,14 @@ public class Formation {
 
 	public void setIdRespCat(int idRespCat) {
 		this.idRespCat = idRespCat;
+	}
+
+	public int getNbreJrs() {
+		return nbreJrs;
+	}
+
+	public void setNbreJrs(int nbrejrs) {
+		this.nbreJrs = nbrejrs;
 	}
 	
 }
