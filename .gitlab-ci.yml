@@ -29,7 +29,7 @@ services:
 build_dockerhub:
     stage: build
     tags:
-      - docker
+      - runner-prod
     script:
         - docker build -t ${IMAGE_NAME_FORMATION} webServices/FormationRestApi/
         - docker save ${IMAGE_NAME_FORMATION} > FormationRestApi_public.tar
@@ -60,7 +60,7 @@ test_image:
 Release:
     stage: Push Image
     tags:
-      - docker
+      - runner-prod
     script:
         - docker load < FormationRestApi_public.tar
         - docker login -u sadofrazer -p ${PASSWORD}
@@ -75,7 +75,7 @@ Release:
 code review:
     stage: Code Review
     tags:
-      - docker
+      - runner-prod
     image: alpine
     services:
         - name: alpine
@@ -107,7 +107,7 @@ code review:
 clear review:
     stage: Clear Review
     tags:
-      - docker
+      - runner-prod
     image: alpine
     services:
         - name: alpine
@@ -139,7 +139,7 @@ clear review:
 deploy:
     stage: Deploy Prod
     tags:
-      - docker
+      - runner-prod
     image: alpine
     services:
         - name: alpine
