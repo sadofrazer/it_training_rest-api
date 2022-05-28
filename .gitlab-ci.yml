@@ -54,7 +54,7 @@ test_image:
         - curl http://it-training-bdd.cloudapps-cm.com:8081/FormationRestApi/rest/domaine | grep -iq "idDomaine"
         - curl http://it-training-bdd.cloudapps-cm.com:8081/FormationRestApi/rest/theme | grep -iq "idTheme"
         - curl http://it-training-bdd.cloudapps-cm.com:8081/FormationRestApi/rest/formation | grep -iq "idFormation"
-        - curl http://docker-frazer:8081/FormationRestApi/rest/formation/1 | grep -i "idFormation" || true
+        - curl http://it-training-bdd.cloudapps-cm.com:8081/FormationRestApi/rest/formation/1 | grep -i "idFormation" || true
         - echo "test OK"
     rules:
         - if: ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")
@@ -160,10 +160,11 @@ deploy:
       - echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null 
     script:
     - echo "Deploying API on prod env"
-    - scp del_containers.sh sadofrazer@$PRODUCTION_HOST:/home/sadofrazer/del_containers.sh 
     - ssh sadofrazer@$PRODUCTION_HOST -p 22 "sh /home/sadofrazer/del_containers.sh"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker stop prod-$CONTAINER_NAME_FORMATION" || tue
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rm prod-$CONTAINER_NAME_FORMATION" || true
     - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi ${IMAGE_NAME_FORMATION} || true"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name $CONTAINER_NAME_FORMATION -d -p 8081:8080 ${IMAGE_NAME_FORMATION}"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name prod-$CONTAINER_NAME_FORMATION -d -p 8081:8080 ${IMAGE_NAME_FORMATION}"
     environment: 
         name: production
         url: "http://${PRODUCTION_HOST}:8081/FormationRestApi/rest/domaine"
