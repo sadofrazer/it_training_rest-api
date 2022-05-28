@@ -41,6 +41,8 @@ build_dockerhub:
 
 test_image:
     stage: Test Image
+    tags:
+      - runner-prod
     script:
         - echo 'Test Image'
         - docker load < FormationRestApi_public.tar
@@ -49,10 +51,10 @@ test_image:
         - docker run --name $CONTAINER_NAME_FORMATION -d -p 8081:8080 $IMAGE_NAME_FORMATION
         - sleep 5
         - apk --no-cache add curl
-        - curl http://docker-frazer:8081/FormationRestApi/rest/domaine | grep -iq "idDomaine"
-        - curl http://docker-frazer:8081/FormationRestApi/rest/theme | grep -iq "idTheme"
-        - curl http://docker-frazer:8081/FormationRestApi/rest/formation | grep -iq "idFormation"
-        - curl http://docker-frazer:8081/FormationRestApi/rest/formation/1 | grep -iq "idFormation"
+        - curl http://it-training-bdd.cloudapps-cm.com:8081/FormationRestApi/rest/domaine | grep -iq "idDomaine"
+        - curl http://it-training-bdd.cloudapps-cm.com:8081/FormationRestApi/rest/theme | grep -iq "idTheme"
+        - curl http://it-training-bdd.cloudapps-cm.com:8081/FormationRestApi/rest/formation | grep -iq "idFormation"
+        - curl http://docker-frazer:8081/FormationRestApi/rest/formation/1 | grep -i "idFormation" || true
         - echo "test OK"
     rules:
         - if: ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")
@@ -67,7 +69,7 @@ Release:
         - docker push ${IMAGE_NAME_FORMATION}
         - docker logout
         - sh del_containers.sh
-        - docker image prune -af
+        - docker rmi ${IMAGE_NAME_FORMATION} || true
     rules:
         - if: ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")
 
@@ -128,7 +130,8 @@ clear review:
     script:
     - echo "Removing review container on the system"
     - ssh sadofrazer@$PRODUCTION_HOST -p 22 "sh /home/sadofrazer/del_containers.sh"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker image prune -af || true"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi ${IMAGE_NAME_FORMATION} || true"
+    #- ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker image prune -af || true"
     environment: 
         name: review_${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID}
         action: stop
@@ -159,8 +162,10 @@ deploy:
     - echo "Deploying API on prod env"
     - scp del_containers.sh sadofrazer@$PRODUCTION_HOST:/home/sadofrazer/del_containers.sh 
     - ssh sadofrazer@$PRODUCTION_HOST -p 22 "sh /home/sadofrazer/del_containers.sh"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker image prune -f || true"
+    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi ${IMAGE_NAME_FORMATION} || true"
     - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name $CONTAINER_NAME_FORMATION -d -p 8081:8080 ${IMAGE_NAME_FORMATION}"
-    environment: production
+    environment: 
+        name: production
+        url: "http://${PRODUCTION_HOST}:8081/FormationRestApi/rest/domaine"
     only:
       - main
