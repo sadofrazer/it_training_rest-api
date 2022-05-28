@@ -24,10 +24,12 @@ public class GestionFormation {
 		sthemeBll=new SthemeBll();
 	}
 	
+	
 	@GET
 	public List<Formation> getAllFormations(){
 		return formationBll.selectAllFormations();
 	}
+	
 	
 	@GET @Path("/{id: \\d+}")
 	public Formation getFormationById(@PathParam("id") int id) {
@@ -39,43 +41,64 @@ public class GestionFormation {
 	}
 	
 	
+	@POST @Path("/order")
+	public List<Formation> getAllOrderBy(@FormParam("order") String order){
+		return formationBll.getAllOrderBy(order);
+	}
+	
+	
 	@POST @Path("/search")
 	public List<Formation> SearchFormationByParams(@FormParam("codeForm") String CodeForm, @FormParam("nomForm") String nomForm, @FormParam("nomStheme") String nomStheme) {
 		return formationBll.searchByParams(CodeForm, nomForm, nomStheme);
 	}
 	
+	
 	@POST
 	public boolean insertFormation(@FormParam("codeForm") String code, @FormParam("nomForm") String nom, 
-			@FormParam("description") String description, @FormParam("idStheme") String stheme, @FormParam("idRespCat") String respCat) {
+			@FormParam("description") String description,@FormParam("nbreJrs") String nbjrs, @FormParam("idStheme") String stheme, @FormParam("idRespCat") String respCat) {
 		
+		int nbreJrs =(nbjrs!=null)? Integer.parseInt(nbjrs):0;
 		int idStheme =(stheme!=null)? Integer.parseInt(stheme):0;
 		int idRespCat =(respCat!=null)? Integer.parseInt(respCat):0;
-		Formation formation = new Formation(code, nom, description,sthemeBll.getSthemeById(idStheme), idRespCat);
+		Formation formation = new Formation(code, nom, description,nbreJrs,sthemeBll.getSthemeById(idStheme), idRespCat);
 		return formationBll.insertFormation(formation);
 		
 	}
 	
 	@PUT @Path("/{id: \\d+}")
 	public boolean updateFormation(@PathParam("id") int id, @FormParam("codeForm") String codeForm, @FormParam("nomForm") String nom, 
-			@FormParam("description") String description, @FormParam("idStheme") String stheme, @FormParam("idRespCat") String respCat) {
+			@FormParam("description") String description,@FormParam("nbreJrs") String nbjrs, @FormParam("idStheme") String stheme, @FormParam("idRespCat") String respCat) {
 		
-		if (formationBll.idExist(id)) {
+		int nbreJrs =(nbjrs!=null)? Integer.parseInt(nbjrs):0;
+		int idStheme =(stheme!=null)? Integer.parseInt(stheme):0;
+		int idRespCat =(respCat!=null)? Integer.parseInt(respCat):0;
+		
+		if (formationBll.idExist(id) && sthemeBll.getSthemeById(idStheme)!=null) {
 			
 			Formation formation = formationBll.getFormationById(id);
-			int idStheme =(stheme!=null)? Integer.parseInt(stheme):0;
-			int idRespCat =(respCat!=null)? Integer.parseInt(respCat):0;
-			formation.setCodeForm(codeForm);
+			
+			if(!codeForm.equals(formation.getCodeForm())) {
+				if(formationBll.codeExist(codeForm)) {
+					System.err.println("Désolé vous ne pouvez pas mettre à jour en utilisant ce code car il existe déja dans la BDD, le code formation doit etre UNIQUE");
+					return false;
+				}	
+			}
+			
+			formation.setCodeForm(codeForm);	
 			formation.setDescription(description);
 			formation.setNom(nom);
+			formation.setNbreJrs(nbreJrs);
 			formation.setStheme(sthemeBll.getSthemeById(idStheme));
 			formation.setIdRespCat(idRespCat);
 			
-			return formationBll.updateFormation(formation);
+			return formationBll.updateFormation(formation);	
+			
 		}else {
 			return false;
 		}
 		
 	}
+	
 	
 	@DELETE @Path("/{id: \\d+}")
 	public boolean deleteFormation(@PathParam("id") int id) {

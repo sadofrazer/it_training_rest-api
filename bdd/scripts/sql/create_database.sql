@@ -98,6 +98,7 @@ CREATE TABLE `Formation` (
   `codeFormation` varchar(10) not null UNIQUE,
   `nom` varchar(250) not null,
   `description` varchar(250),
+  `nbreJrs` int not null,
   `idStheme` int not null,
   `idRespCat` int not null
 );
