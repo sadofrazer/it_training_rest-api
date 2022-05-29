@@ -37,8 +37,6 @@ build dockerhub formation:
     script:
         - docker build -t ${IMAGE_NAME_FORMATION} webServices/FormationRestApi/
         - docker save ${IMAGE_NAME_FORMATION} > FormationRestApi_public.tar
-    rules:
-        - if: ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")
     artifacts:
         paths:
             - FormationRestApi_public.tar
@@ -76,8 +74,6 @@ Release all:
         - docker logout
         - sh del_containers.sh
         #- docker rmi ${IMAGE_NAME_FORMATION} || true
-    rules:
-        - if: ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")
 
 # FIN CI et DEBUT PHASES CD
 deploy Formation:
@@ -106,7 +102,7 @@ deploy Formation:
       - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker stop ${PROD_CONTAINER_NAME}_formation" || true
       - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rm ${PROD_CONTAINER_NAME}_formation" || true
       - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi ${IMAGE_NAME_FORMATION} || true"
-      - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name ${PROD_CONTAINER_NAME}_formation -d -p 8081:8080 ${IMAGE_NAME_FORMATION}"
+      - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name ${PROD_CONTAINER_NAME}_formation -d -p 8081:8080 --restart=always ${IMAGE_NAME_FORMATION}"
       - sleep 5
       - apk --no-cache add curl
       - curl http://it-training-bdd.cloudapps-cm.com:8081/FormationRestApi/rest/domaine | grep -iq "idDomaine"
@@ -129,8 +125,6 @@ build dockerhub user:
     script:
         - docker build -t ${IMAGE_NAME_UTILISATEUR} webServices/UtilisateurRestApi/
         - docker save ${IMAGE_NAME_UTILISATEUR} > UtilisateurRestApi_public.tar
-    rules:
-        - if: ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")
     artifacts:
         paths:
             - UtilisateurRestApi_public.tar
@@ -181,7 +175,7 @@ deploy Utilisateur:
       - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker stop ${PROD_CONTAINER_NAME}_utilisateur" || true
       - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rm ${PROD_CONTAINER_NAME}_utilisateur" || true
       - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi ${IMAGE_NAME_UTILISATEUR} || true"
-      - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name ${PROD_CONTAINER_NAME}_utilisateur -d -p 8082:8080 ${IMAGE_NAME_UTILISATEUR}"
+      - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name ${PROD_CONTAINER_NAME}_utilisateur -d -p 8082:8080 --restart=always ${IMAGE_NAME_UTILISATEUR}"
       - sleep 5
       - apk --no-cache add curl
       - curl http://it-training-bdd.cloudapps-cm.com:8082/UtilisateurRestApi/rest/utilisateur | grep -iq "id"
