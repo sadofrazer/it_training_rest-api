@@ -55,8 +55,27 @@ test image formation:
         - curl http://it-training-bdd.cloudapps-cm.com:5001/FormationRestApi/rest/formation | grep -iq "idFormation"
         - curl http://it-training-bdd.cloudapps-cm.com:5001/FormationRestApi/rest/formation/1 | grep -iq "idFormation"
         - echo "test OK"
-    rules:
-        - if: ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")
+
+test image merge:
+    stage: Test Image
+    tags:
+      - runner-prod
+    script:
+        - echo 'Test Image'
+        #- docker load < FormationRestApi_public.tar
+        - docker images
+        - sh del_containers.sh
+        - docker run --name $CONTAINER_NAME_FORMATION -d -p 5001:8080 $IMAGE_NAME_FORMATION
+        - docker run --name $CONTAINER_NAME_UTILISATEUR -d -p 5002:8080 $IMAGE_NAME_UTILISATEUR
+        - sleep 5
+        - apk --no-cache add curl
+        - curl http://it-training-bdd.cloudapps-cm.com:5001/FormationRestApi/rest/formation | grep -iq "idFormation"
+        - curl http://it-training-bdd.cloudapps-cm.com:5001/FormationRestApi/rest/theme | grep -iq "idTheme"
+        - curl http://it-training-bdd.cloudapps-cm.com:5002/UtilisateurRestApi/rest/utilisateur | grep -iq "id"
+        - curl http://it-training-bdd.cloudapps-cm.com:5002/UtilisateurRestApi/rest/apprenant | grep -iq "id"
+        - echo "test OK"
+    only:
+      - merge_requests
 
 Release all:
     stage: Push Image
@@ -143,8 +162,8 @@ test image user:
         - curl http://it-training-bdd.cloudapps-cm.com:5002/UtilisateurRestApi/rest/formateur | grep -iq "id"
         - curl http://it-training-bdd.cloudapps-cm.com:5002/UtilisateurRestApi/rest/utilisateur/1 | grep -iq "id"
         - echo "test OK"
-    rules:
-        - if: ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")
+    #rules:
+        #- if: ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")
 
 deploy Utilisateur:
     stage: Deploy Prod
