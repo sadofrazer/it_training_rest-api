@@ -114,7 +114,7 @@ deploy Formation:
       - curl http://it-training-bdd.cloudapps-cm.com:8081/FormationRestApi/rest/formation | grep -iq "idFormation"
       - curl http://it-training-bdd.cloudapps-cm.com:8081/FormationRestApi/rest/formation/1 | grep -iq "idFormation"
     environment: 
-        name: production
+        name: Formation_prod_env
         url: "http://${PRODUCTION_HOST}:8081/FormationRestApi/rest/domaine"
     only:
       - main
@@ -190,7 +190,7 @@ deploy Utilisateur:
       - curl http://it-training-bdd.cloudapps-cm.com:8082/UtilisateurRestApi/rest/utilisateur/1 | grep -iq "id"
       - echo "test OK"
     environment: 
-        name: production
+        name: User_prod_env
         url: "http://${PRODUCTION_HOST}:8082/UtilisateurRestApi/rest/utilisateur"
     only:
       - main
