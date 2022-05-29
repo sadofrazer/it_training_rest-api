@@ -135,7 +135,7 @@ test image user:
         - docker load < UtilisateurRestApi_public.tar
         - docker images
         - sh del_containers.sh
-        - docker run --name $CONTAINER_NAME_UTILISATEUR -d -p 8082:8080 $IMAGE_NAME_UTILISATEUR
+        - docker run --name $CONTAINER_NAME_UTILISATEUR -d -p 5002:8080 $IMAGE_NAME_UTILISATEUR
         - sleep 5
         - apk --no-cache add curl
         - curl http://it-training-bdd.cloudapps-cm.com:5002/UtilisateurRestApi/rest/utilisateur | grep -iq "id"
