@@ -6,6 +6,9 @@ public class Apprenant extends Utilisateur {
 
 private String dernierDiplome;
 
+public Apprenant(){
+	
+}
 
 public Apprenant(int idUtilisateur, String codeUser, String nom, String prenom, String telephone, String email,
 		LocalDate dateNaiss, String numeroSiret, String login, String password, String societe, String statut) {

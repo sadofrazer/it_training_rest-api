@@ -51,6 +51,10 @@ public class Utilisateur {
 			
 }
 
+public Utilisateur(){
+	
+}
+
 	public int getIdUtilisateur() {
 		return idUtilisateur;
 	}
