@@ -111,7 +111,7 @@ code review formation:
     environment: 
         name: review_${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID}
         url: "http://${PRODUCTION_HOST}:${REVIEW_PORT}/FormationRestApi/rest/domaine"
-        on_stop: clear review
+        on_stop: clear review formation
     only:
       - merge_requests
 
@@ -248,7 +248,7 @@ code review user:
     environment: 
         name: review2_${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID}
         url: "http://${PRODUCTION_HOST}:${REVIEW_PORT2}/UtilisateurRestApi/rest/utilisateur"
-        on_stop: clear review
+        on_stop: clear review user
     only:
       - merge_requests
 
