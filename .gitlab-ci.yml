@@ -4,8 +4,8 @@ stages:
 - build
 - Test Image
 - Push Image
-- Code Review
-- Clear Review
+#Code Review
+#Clear Review
 - Deploy Prod
 
 variables:
@@ -80,74 +80,6 @@ Release all:
         - if: ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")
 
 # FIN CI et DEBUT PHASES CD
-code review formation:
-    stage: Code Review
-    tags:
-      - runner-prod
-    image: alpine
-    services:
-        - name: alpine
-          alias: alpine-frazer
-    before_script:
-      # Get ssh keys from target server and add them to known_hosts
-      - apk update
-      - 'which ssh-agent || ( apk add openssh-client )'
-      - eval $(ssh-agent -s)
-      - mkdir -p ~/.ssh
-      - chmod 700 ~/.ssh
-      - ssh-keyscan -p 22 -4 $PRODUCTION_HOST >> ~/.ssh/known_hosts
-      - chmod 644 ~/.ssh/known_hosts
-      # Add the private key defined in PRIVATE_KEY variable
-      - echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null 
-    script:
-      - echo "Deploying the system"
-      - scp del_containers.sh sadofrazer@$PRODUCTION_HOST:/home/sadofrazer/del_containers.sh 
-      - ssh sadofrazer@$PRODUCTION_HOST -p 22 "sh /home/sadofrazer/del_containers.sh"
-      - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi $IMAGE_NAME_FORMATION || true"
-      - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name $CONTAINER_NAME_FORMATION-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID} -d -p $REVIEW_PORT:8080 $IMAGE_NAME_FORMATION"
-      - sleep 5
-      - apk --no-cache add curl
-      - curl http://it-training-bdd.cloudapps-cm.com:${REVIEW_PORT}/FormationRestApi/rest/formation | grep -iq "idFormation"
-    environment: 
-        name: review_${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID}
-        url: "http://${PRODUCTION_HOST}:${REVIEW_PORT}/FormationRestApi/rest/domaine"
-        on_stop: clear review formation
-    only:
-      - merge_requests
-
-clear review formation:
-    stage: Clear Review
-    tags:
-      - runner-prod
-    image: alpine
-    services:
-        - name: alpine
-          alias: alpine-frazer
-    variables:
-        GIT_STRATEGY: none
-    before_script:
-      # Get ssh keys from target server and add them to known_hosts
-      - apk update
-      - 'which ssh-agent || ( apk add openssh-client )'
-      - eval $(ssh-agent -s)
-      - mkdir -p ~/.ssh
-      - chmod 700 ~/.ssh
-      - ssh-keyscan -p 22 -4 $PRODUCTION_HOST >> ~/.ssh/known_hosts
-      - chmod 644 ~/.ssh/known_hosts
-      # Add the private key defined in PRIVATE_KEY variable
-      - echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null 
-    script:
-    - echo "Removing review container on the system"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "sh /home/sadofrazer/del_containers.sh"
-    #- ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi ${IMAGE_NAME_FORMATION} || true"
-    #- ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker image prune -af || true"
-    environment: 
-        name: review_${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID}
-        action: stop
-    only:
-      - merge_requests
-    #when: manual
-
 deploy Formation:
     stage: Deploy Prod
     tags:
@@ -168,13 +100,19 @@ deploy Formation:
       # Add the private key defined in PRIVATE_KEY variable
       - echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null 
     script:
-    - echo "Deploying API on prod env"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "sh /home/sadofrazer/del_containers.sh"
-    #FORMATION
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker stop ${PROD_CONTAINER_NAME}_formation" || true
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rm ${PROD_CONTAINER_NAME}_formation" || true
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi ${IMAGE_NAME_FORMATION} || true"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name ${PROD_CONTAINER_NAME}_formation -d -p 8081:8080 ${IMAGE_NAME_FORMATION}"
+      - echo "Deploying API on prod env"
+      - ssh sadofrazer@$PRODUCTION_HOST -p 22 "sh /home/sadofrazer/del_containers.sh"
+      #FORMATION
+      - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker stop ${PROD_CONTAINER_NAME}_formation" || true
+      - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rm ${PROD_CONTAINER_NAME}_formation" || true
+      - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi ${IMAGE_NAME_FORMATION} || true"
+      - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name ${PROD_CONTAINER_NAME}_formation -d -p 8081:8080 ${IMAGE_NAME_FORMATION}"
+      - sleep 5
+      - apk --no-cache add curl
+      - curl http://it-training-bdd.cloudapps-cm.com:8081/FormationRestApi/rest/domaine | grep -iq "idDomaine"
+      - curl http://it-training-bdd.cloudapps-cm.com:8081/FormationRestApi/rest/theme | grep -iq "idTheme"
+      - curl http://it-training-bdd.cloudapps-cm.com:8081/FormationRestApi/rest/formation | grep -iq "idFormation"
+      - curl http://it-training-bdd.cloudapps-cm.com:8081/FormationRestApi/rest/formation/1 | grep -iq "idFormation"
     environment: 
         name: production
         url: "http://${PRODUCTION_HOST}:8081/FormationRestApi/rest/domaine"
@@ -217,74 +155,6 @@ test image user:
     rules:
         - if: ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")
 
-code review user:
-    stage: Code Review
-    tags:
-      - runner-prod
-    image: alpine
-    services:
-        - name: alpine
-          alias: alpine-frazer
-    before_script:
-      # Get ssh keys from target server and add them to known_hosts
-      - apk update
-      - 'which ssh-agent || ( apk add openssh-client )'
-      - eval $(ssh-agent -s)
-      - mkdir -p ~/.ssh
-      - chmod 700 ~/.ssh
-      - ssh-keyscan -p 22 -4 $PRODUCTION_HOST >> ~/.ssh/known_hosts
-      - chmod 644 ~/.ssh/known_hosts
-      # Add the private key defined in PRIVATE_KEY variable
-      - echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null 
-    script:
-      - echo "Deploying the system"
-      - scp del_containers.sh sadofrazer@$PRODUCTION_HOST:/home/sadofrazer/del_containers.sh 
-      - ssh sadofrazer@$PRODUCTION_HOST -p 22 "sh /home/sadofrazer/del_containers.sh"
-      - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi $IMAGE_NAME_UTILISATEUR || true"
-      - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name $CONTAINER_NAME_UTILISATEUR-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID} -d -p $REVIEW_PORT2:8080 $IMAGE_NAME_UTILISATEUR"
-      - sleep 5
-      - apk --no-cache add curl
-      - curl http://it-training-bdd.cloudapps-cm.com:${REVIEW_PORT2}/UtilisateurRestApi/rest/utilisateur | grep -iq "id"
-    environment: 
-        name: review2_${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID}
-        url: "http://${PRODUCTION_HOST}:${REVIEW_PORT2}/UtilisateurRestApi/rest/utilisateur"
-        on_stop: clear review user
-    only:
-      - merge_requests
-
-clear review user:
-    stage: Clear Review
-    tags:
-      - runner-prod
-    image: alpine
-    services:
-        - name: alpine
-          alias: alpine-frazer
-    variables:
-        GIT_STRATEGY: none
-    before_script:
-      # Get ssh keys from target server and add them to known_hosts
-      - apk update
-      - 'which ssh-agent || ( apk add openssh-client )'
-      - eval $(ssh-agent -s)
-      - mkdir -p ~/.ssh
-      - chmod 700 ~/.ssh
-      - ssh-keyscan -p 22 -4 $PRODUCTION_HOST >> ~/.ssh/known_hosts
-      - chmod 644 ~/.ssh/known_hosts
-      # Add the private key defined in PRIVATE_KEY variable
-      - echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null 
-    script:
-    - echo "Removing review container on the system"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "sh /home/sadofrazer/del_containers.sh"
-    #- ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi ${IMAGE_NAME_FORMATION} || true"
-    #- ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker image prune -af || true"
-    environment: 
-        name: review2_${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID}
-        action: stop
-    only:
-      - merge_requests
-    #when: manual
-
 deploy Utilisateur:
     stage: Deploy Prod
     tags:
@@ -305,13 +175,20 @@ deploy Utilisateur:
       # Add the private key defined in PRIVATE_KEY variable
       - echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null 
     script:
-    - echo "Deploying API on prod env"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "sh /home/sadofrazer/del_containers.sh"
-    #UTILISATEUR
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker stop ${PROD_CONTAINER_NAME}_utilisateur" || true
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rm ${PROD_CONTAINER_NAME}_utilisateur" || true
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi ${IMAGE_NAME_UTILISATEUR} || true"
-    - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name ${PROD_CONTAINER_NAME}_utilisateur -d -p 8082:8080 ${IMAGE_NAME_UTILISATEUR}"
+      - echo "Deploying API on prod env"
+      - ssh sadofrazer@$PRODUCTION_HOST -p 22 "sh /home/sadofrazer/del_containers.sh"
+      #UTILISATEUR
+      - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker stop ${PROD_CONTAINER_NAME}_utilisateur" || true
+      - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rm ${PROD_CONTAINER_NAME}_utilisateur" || true
+      - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker rmi ${IMAGE_NAME_UTILISATEUR} || true"
+      - ssh sadofrazer@$PRODUCTION_HOST -p 22 "docker run --name ${PROD_CONTAINER_NAME}_utilisateur -d -p 8082:8080 ${IMAGE_NAME_UTILISATEUR}"
+      - sleep 5
+      - apk --no-cache add curl
+      - curl http://it-training-bdd.cloudapps-cm.com:8082/UtilisateurRestApi/rest/utilisateur | grep -iq "id"
+      - curl http://it-training-bdd.cloudapps-cm.com:8082/UtilisateurRestApi/rest/apprenant | grep -iq "id"
+      - curl http://it-training-bdd.cloudapps-cm.com:8082/UtilisateurRestApi/rest/formateur | grep -iq "id"
+      - curl http://it-training-bdd.cloudapps-cm.com:8082/UtilisateurRestApi/rest/utilisateur/1 | grep -iq "id"
+      - echo "test OK"
     environment: 
         name: production
         url: "http://${PRODUCTION_HOST}:8082/UtilisateurRestApi/rest/utilisateur"
