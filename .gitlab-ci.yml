@@ -19,10 +19,7 @@ variables:
     CONTAINER_NAME_DASHBOARD: "rest_api_dashboard"
     PROD_CONTAINER_NAME: "prod_api_rest"
     PRODUCTION_HOST: "34.70.85.182"
-    REVIEW_PORT: $((5000 + RANDOM % 10))
-    REVIEW_PORT2: $((5020 + RANDOM % 10))
-    REVIEW_PORT3: $((5040 + RANDOM % 10))
-    REVIEW_PORT2: $((5060 + RANDOM % 10))
+    #REVIEW_PORT: $((5000 + RANDOM % 10))
 
 
 image: docker:latest
@@ -50,13 +47,13 @@ test image formation:
         - docker load < FormationRestApi_public.tar
         - docker images
         - sh del_containers.sh
-        - docker run --name $CONTAINER_NAME_FORMATION -d -p 8081:8080 $IMAGE_NAME_FORMATION
+        - docker run --name $CONTAINER_NAME_FORMATION -d -p 5001:8080 $IMAGE_NAME_FORMATION
         - sleep 5
         - apk --no-cache add curl
-        - curl http://it-training-bdd.cloudapps-cm.com:8081/FormationRestApi/rest/domaine | grep -iq "idDomaine"
-        - curl http://it-training-bdd.cloudapps-cm.com:8081/FormationRestApi/rest/theme | grep -iq "idTheme"
-        - curl http://it-training-bdd.cloudapps-cm.com:8081/FormationRestApi/rest/formation | grep -iq "idFormation"
-        - curl http://it-training-bdd.cloudapps-cm.com:8081/FormationRestApi/rest/formation/1 | grep -iq "idFormation"
+        - curl http://it-training-bdd.cloudapps-cm.com:5001/FormationRestApi/rest/domaine | grep -iq "idDomaine"
+        - curl http://it-training-bdd.cloudapps-cm.com:5001/FormationRestApi/rest/theme | grep -iq "idTheme"
+        - curl http://it-training-bdd.cloudapps-cm.com:5001/FormationRestApi/rest/formation | grep -iq "idFormation"
+        - curl http://it-training-bdd.cloudapps-cm.com:5001/FormationRestApi/rest/formation/1 | grep -iq "idFormation"
         - echo "test OK"
     rules:
         - if: ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")
@@ -141,10 +138,10 @@ test image user:
         - docker run --name $CONTAINER_NAME_UTILISATEUR -d -p 8082:8080 $IMAGE_NAME_UTILISATEUR
         - sleep 5
         - apk --no-cache add curl
-        - curl http://it-training-bdd.cloudapps-cm.com:8082/UtilisateurRestApi/rest/utilisateur | grep -iq "id"
-        - curl http://it-training-bdd.cloudapps-cm.com:8082/UtilisateurRestApi/rest/apprenant | grep -iq "id"
-        - curl http://it-training-bdd.cloudapps-cm.com:8082/UtilisateurRestApi/rest/formateur | grep -iq "id"
-        - curl http://it-training-bdd.cloudapps-cm.com:8082/UtilisateurRestApi/rest/utilisateur/1 | grep -iq "id"
+        - curl http://it-training-bdd.cloudapps-cm.com:5002/UtilisateurRestApi/rest/utilisateur | grep -iq "id"
+        - curl http://it-training-bdd.cloudapps-cm.com:5002/UtilisateurRestApi/rest/apprenant | grep -iq "id"
+        - curl http://it-training-bdd.cloudapps-cm.com:5002/UtilisateurRestApi/rest/formateur | grep -iq "id"
+        - curl http://it-training-bdd.cloudapps-cm.com:5002/UtilisateurRestApi/rest/utilisateur/1 | grep -iq "id"
         - echo "test OK"
     rules:
         - if: ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")
