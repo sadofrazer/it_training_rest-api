@@ -94,7 +94,7 @@ public class GestionFormation {
 			return formationBll.updateFormation(formation);	
 			
 		}else {
-			return true;
+			return false;
 		}
 		
 	}

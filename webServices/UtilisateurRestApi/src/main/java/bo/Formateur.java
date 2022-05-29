@@ -13,8 +13,9 @@ public Formateur(int idUtilisateur, String codeUser, String nom, String prenom, 
 	
 }
 
-
+public Formateur(){
 	
+}	
 
 
 public String getCertification() {
