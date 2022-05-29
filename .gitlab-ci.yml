@@ -9,10 +9,10 @@ stages:
 - Deploy Prod
 
 variables:
-    IMAGE_NAME_FORMATION: "sadofrazer/ittraining_api_formation:${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID}"
-    IMAGE_NAME_UTILISATEUR: "sadofrazer/ittraining_api_utilisateur:${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID}"
-    IMAGE_NAME_LOGISTIQUE: "sadofrazer/ittraining_api_logistique:${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID}"
-    IMAGE_NAME_DASHBOARD: "sadofrazer/ittraining_api_dashboard:${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}-${CI_PIPELINE_IID}"
+    IMAGE_NAME_FORMATION: "sadofrazer/ittraining_api_formation:${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}"
+    IMAGE_NAME_UTILISATEUR: "sadofrazer/ittraining_api_utilisateur:${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}"
+    IMAGE_NAME_LOGISTIQUE: "sadofrazer/ittraining_api_logistique:${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}"
+    IMAGE_NAME_DASHBOARD: "sadofrazer/ittraining_api_dashboard:${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}"
     CONTAINER_NAME_FORMATION: "rest_api_formation"
     CONTAINER_NAME_UTILISATEUR: "rest_api_utilisateur"
     CONTAINER_NAME_LOGISTIQUE: "rest_api_logistique"
@@ -74,8 +74,8 @@ test image merge:
         - curl http://it-training-bdd.cloudapps-cm.com:5002/UtilisateurRestApi/rest/utilisateur | grep -iq "id"
         - curl http://it-training-bdd.cloudapps-cm.com:5002/UtilisateurRestApi/rest/apprenant | grep -iq "id"
         - echo "test OK"
-    only:
-      - merge_requests
+    rules:
+        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
 Release all:
     stage: Push Image
