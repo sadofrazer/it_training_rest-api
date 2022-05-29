@@ -184,7 +184,7 @@ deploy Formation:
 
 #####################################  USER  ####################################
 
-  build dockerhub user:
+build dockerhub user:
     stage: build
     tags:
       - runner-prod
@@ -197,7 +197,7 @@ deploy Formation:
         paths:
             - UtilisateurRestApi_public.tar
   
-  test image user:
+test image user:
     stage: Test Image
     tags:
       - runner-prod
@@ -217,7 +217,7 @@ deploy Formation:
     rules:
         - if: ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")
 
-  code review user:
+code review user:
     stage: Code Review
     tags:
       - runner-prod
@@ -252,7 +252,7 @@ deploy Formation:
     only:
       - merge_requests
 
-  clear review user:
+clear review user:
     stage: Clear Review
     tags:
       - runner-prod
@@ -285,7 +285,7 @@ deploy Formation:
       - merge_requests
     #when: manual
 
-  deploy Utilisateur:
+deploy Utilisateur:
     stage: Deploy Prod
     tags:
       - runner-prod
