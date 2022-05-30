@@ -1,6 +1,10 @@
 package formation.dal;
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,9 +14,11 @@ import formation.bo.Formation;
 import formation.bo.SousTheme;
 import formation.dal.stheme.SthemeJdbcImpl;
 
+@Repository
 public class FormationJdbcImpl {
 	
-	
+	@Autowired
+	private SthemeJdbcImpl sthemeDal;
 	/**
 	 * Méthode du module Formation permettant de retourner la formation correspondant à l'Id passé en paramètre
 	 */
@@ -20,7 +26,7 @@ public class FormationJdbcImpl {
 	public Formation getFormationByCode(String codeForm) {
 		
 		Formation formation = null;
-		SthemeJdbcImpl sthemeBll = new SthemeJdbcImpl();
+		 //= new SthemeJdbcImpl();
 		
 		Connection cnx = ConnectionProvider.getConnection();
 		try {
@@ -34,7 +40,7 @@ public class FormationJdbcImpl {
 				formation.setNom(rs.getString("nom"));
 				formation.setDescription(rs.getString("description"));
 				formation.setNbreJrs(rs.getInt("nbreJrs"));
-				formation.setStheme(sthemeBll.getSthemeById(rs.getInt("idStheme")));
+				formation.setStheme(sthemeDal.getSthemeById(rs.getInt("idStheme")));
 				formation.setIdRespCat(rs.getInt("idRespCat"));
 
 			}else {
@@ -51,7 +57,7 @@ public class FormationJdbcImpl {
 	public Formation getFormationById(int id) {
 		
 		Formation formation = null;
-		SthemeJdbcImpl sthemeBll = new SthemeJdbcImpl();
+		//SthemeJdbcImpl sthemeBll = new SthemeJdbcImpl();
 		
 		Connection cnx = ConnectionProvider.getConnection();
 		try {
@@ -65,7 +71,7 @@ public class FormationJdbcImpl {
 				formation.setNom(rs.getString("nom"));
 				formation.setDescription(rs.getString("description"));
 				formation.setNbreJrs(rs.getInt("nbreJrs"));
-				formation.setStheme(sthemeBll.getSthemeById(rs.getInt("idStheme")));
+				formation.setStheme(sthemeDal.getSthemeById(rs.getInt("idStheme")));
 				formation.setIdRespCat(rs.getInt("idRespCat"));
 
 			}else {
@@ -87,7 +93,7 @@ public class FormationJdbcImpl {
 
 	public List<Formation> selectAllFormations() {
 		
-		SthemeJdbcImpl sthemeBll = new SthemeJdbcImpl();
+		//SthemeJdbcImpl sthemeBll = new SthemeJdbcImpl();
 		List<Formation> formations = new ArrayList<Formation>();
 		
 		Connection cnx = ConnectionProvider.getConnection();
@@ -100,7 +106,7 @@ public class FormationJdbcImpl {
 				String nom = rs.getString("nom");
 				String description = rs.getString("description");
 				int nbreJrs = rs.getInt("nbreJrs");
-				SousTheme stheme = sthemeBll.getSthemeById(rs.getInt("idStheme"));
+				SousTheme stheme = sthemeDal.getSthemeById(rs.getInt("idStheme"));
 				int idRespcat = rs.getInt("idRespcat");
 				formations.add(new Formation(idFormation, codeFormation, nom, description,nbreJrs, stheme, idRespcat));
 			}
@@ -114,7 +120,7 @@ public class FormationJdbcImpl {
 	
 	public List<Formation> getAllOrderBy(String order) {
 		
-		SthemeJdbcImpl sthemeBll = new SthemeJdbcImpl();
+		//SthemeJdbcImpl sthemeBll = new SthemeJdbcImpl();
 		List<Formation> formations = new ArrayList<Formation>();
 		
 		Connection cnx = ConnectionProvider.getConnection();
@@ -130,7 +136,7 @@ public class FormationJdbcImpl {
 				String nom = rs.getString("nom");
 				String description = rs.getString("description");
 				int nbreJrs = rs.getInt("nbreJrs");
-				SousTheme stheme = sthemeBll.getSthemeById(rs.getInt("idStheme"));
+				SousTheme stheme = sthemeDal.getSthemeById(rs.getInt("idStheme"));
 				int idRespcat = rs.getInt("idRespcat");
 				formations.add(new Formation(idFormation, codeFormation, nom, description,nbreJrs, stheme, idRespcat));
 			}
@@ -235,7 +241,7 @@ public class FormationJdbcImpl {
 
 	public List<Formation> searchByParams(String codeForm, String nomForm, String nomStheme) {
 		
-		SthemeJdbcImpl sthemeBll = new SthemeJdbcImpl();
+		//SthemeJdbcImpl sthemeBll = new SthemeJdbcImpl();
 		List<Formation> formations = new ArrayList<Formation>();
 		
 		Connection cnx = ConnectionProvider.getConnection();
@@ -252,7 +258,7 @@ public class FormationJdbcImpl {
 				String nom = rs.getString("nom");
 				String description = rs.getString("description");
 				int nbreJrs = rs.getInt("nbreJrs");
-				SousTheme stheme = sthemeBll.getSthemeById(rs.getInt("idStheme"));
+				SousTheme stheme = sthemeDal.getSthemeById(rs.getInt("idStheme"));
 				int idRespcat = rs.getInt("idRespcat");
 				formations.add(new Formation(idFormation, codeFormation, nom, description,nbreJrs, stheme, idRespcat));
 			}

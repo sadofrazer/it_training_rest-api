@@ -2,16 +2,23 @@ package formation.bll;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import formation.bo.Formation;
 import formation.dal.FormationDAO;
 import formation.dal.FormationJdbcImpl;
 
+@Service
 public class FormationBll implements FormationDAO {
 	
+	@Autowired
 	private FormationJdbcImpl dao ;
 	
 	public FormationBll() {
-		dao = new FormationJdbcImpl();
+		//dao = new FormationJdbcImpl();
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 	}
 	
 	@Override
