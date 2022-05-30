@@ -2,15 +2,23 @@ package formation.bll;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import formation.bo.SousTheme;
 import formation.dal.stheme.SthemeDAO;
 import formation.dal.stheme.SthemeJdbcImpl;
 
+@Service
 public class SthemeBll implements SthemeDAO {
+	
+	@Autowired
 	private SthemeJdbcImpl dao ;
 	
 	public SthemeBll() {
-		dao = new SthemeJdbcImpl();
+		//dao = new SthemeJdbcImpl();
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 	}
 
 	@Override

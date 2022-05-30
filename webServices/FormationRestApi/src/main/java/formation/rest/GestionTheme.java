@@ -6,15 +6,21 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import formation.bll.ThemeBll;
 import formation.bo.Theme;
 
 @Path("/theme")
 public class GestionTheme {
+	
+	@Autowired
 	private ThemeBll themeBll;
 	
 	public GestionTheme() {
-		themeBll = new ThemeBll();
+		//themeBll = new ThemeBll();
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 	}
 	
 	@GET

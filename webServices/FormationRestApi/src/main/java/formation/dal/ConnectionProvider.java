@@ -8,6 +8,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import org.springframework.stereotype.Repository;
+
+@Repository
 public class ConnectionProvider {
 	
 	private static DataSource datasource;

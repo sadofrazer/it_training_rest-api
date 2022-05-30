@@ -7,16 +7,23 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import formation.bo.Domaine;
 import formation.bo.Theme;
 import formation.dal.ConnectionProvider;
 import formation.dal.domaine.DomaineJdbcImpl;
 
+@Repository
 public class ThemeJdbcImpl implements ThemeDAO{
-
+	
+	@Autowired
+	private DomaineJdbcImpl domaineDal;
+	
 	@Override
 	public Theme getThemeById(int id) {
-		DomaineJdbcImpl domaineDal = new DomaineJdbcImpl();
+		 //= new DomaineJdbcImpl();
 		Theme theme = null;
 		Connection cnx = ConnectionProvider.getConnection();
 		try {

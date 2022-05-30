@@ -10,18 +10,26 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import formation.bll.FormationBll;
 import formation.bll.SthemeBll;
 import formation.bo.Formation;
 
 @Path("/formation")
 public class GestionFormation {
+	
+	@Autowired
 	private FormationBll formationBll;
+	
+	@Autowired
 	private SthemeBll sthemeBll;
 	
 	public GestionFormation() {
-		formationBll = new FormationBll();
-		sthemeBll=new SthemeBll();
+		//formationBll = new FormationBll();
+		//sthemeBll=new SthemeBll();
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 	}
 	
 	

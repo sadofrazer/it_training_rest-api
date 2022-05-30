@@ -1,6 +1,10 @@
 package formation.dal.stheme;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import formation.bo.SousTheme;
 import formation.bo.Theme;
 import formation.dal.ConnectionProvider;
@@ -12,12 +16,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-
+@Repository
 public class SthemeJdbcImpl implements SthemeDAO{
-
+	
+	public SthemeJdbcImpl() {
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	}
+	@Autowired
+    private ThemeJdbcImpl themeDal;
+	
 	@Override
 	public SousTheme getSthemeById(int id) {
-		ThemeJdbcImpl themeBll = new ThemeJdbcImpl();
+		
+		// = new ThemeJdbcImpl();
 		SousTheme stheme = null;
 		Connection cnx = ConnectionProvider.getConnection();
 		try {
@@ -31,7 +42,7 @@ public class SthemeJdbcImpl implements SthemeDAO{
 				stheme.setNom(rs.getString("nom"));
 				stheme.setDescription(rs.getString("description"));
 				if (rs.getInt("idTheme")>0) {
-					stheme.setTheme(themeBll.getThemeById(rs.getInt("idTheme")));
+					stheme.setTheme(themeDal.getThemeById(rs.getInt("idTheme")));
 				}else {
 					stheme.setTheme(null);
 				}
@@ -51,7 +62,7 @@ public class SthemeJdbcImpl implements SthemeDAO{
 	@Override
 	public List<SousTheme> selectAll() {
 		
-		ThemeJdbcImpl themeBll = new ThemeJdbcImpl();
+		//ThemeJdbcImpl themeBll = new ThemeJdbcImpl();
 		List<SousTheme> sThemes = new ArrayList<SousTheme>();
 		Connection cnx = ConnectionProvider.getConnection();
 		try {
@@ -62,7 +73,7 @@ public class SthemeJdbcImpl implements SthemeDAO{
 				String codeSthem = rs.getString("codeSthem");
 				String nom = rs.getString("nom");
 				String description = rs.getString("description");
-				Theme Theme =  themeBll.getThemeById(rs.getInt("idTheme"));
+				Theme Theme =  themeDal.getThemeById(rs.getInt("idTheme"));
 				sThemes.add(new SousTheme(idStheme, codeSthem, nom, description, Theme));
 			}
 			cnx.close();
