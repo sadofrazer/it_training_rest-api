@@ -1,21 +1,67 @@
 package formation.bo;
 
+import java.time.LocalDate;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+@Entity
 public class AttribSalle {
+	
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idAttribSalle;
+	@Column(nullable = false)
+	private LocalDate dateAttrib;
 	private String statut;
+	
+	@ManyToOne
+	@JoinColumn(name = "idSalle")
+	private Salle salle;
+	
+	@ManyToOne
+	@JoinColumn(name = "idSession")
 	private Session session;
-	private int idRespFor;
+	
+	@ManyToOne
+	@JoinColumn(name="idRespFor")
+	private Responsable respFor;
 	
 	public AttribSalle() {
 		// TODO Auto-generated constructor stub
 	}
+	
+	
+	public LocalDate getDateAttrib() {
+		return dateAttrib;
+	}
 
-	public AttribSalle(int idAttribSalle, String statut, Session session, int idRespFor) {
+
+	public void setDateAttrib(LocalDate dateAttrib) {
+		this.dateAttrib = dateAttrib;
+	}
+
+
+	public Salle getSalle() {
+		return salle;
+	}
+
+
+	public void setSalle(Salle salle) {
+		this.salle = salle;
+	}
+
+
+	public AttribSalle(int idAttribSalle, String statut, Session session, Responsable respFor) {
 		super();
 		this.idAttribSalle = idAttribSalle;
 		this.statut = statut;
 		this.session = session;
-		this.idRespFor = idRespFor;
+		this.respFor = respFor;
 	}
 
 	public int getIdAttribSalle() {
@@ -42,13 +88,15 @@ public class AttribSalle {
 		this.session = session;
 	}
 
-	public int getIdRespFor() {
-		return idRespFor;
+
+	public Responsable getRespFor() {
+		return respFor;
 	}
 
-	public void setIdRespFor(int idRespFor) {
-		this.idRespFor = idRespFor;
+
+	public void setRespFor(Responsable respFor) {
+		this.respFor = respFor;
 	}
-	
+
 	
 }

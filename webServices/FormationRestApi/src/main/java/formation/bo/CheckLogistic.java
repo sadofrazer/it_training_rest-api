@@ -1,13 +1,31 @@
 package formation.bo;
 
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
+@Entity
 public class CheckLogistic {
+	
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idCheck;
 	private String codeCheck;
 	private String statut;
 	private boolean salleIsOk;
 	private boolean toolsIsOk;
 	private String commentaires;
-	private int idRespFor;
+	
+	@ManyToOne
+	@JoinColumn(name="idRespLog")
+	private Responsable respLog;
+	
+	@OneToOne
+	@JoinColumn(name="idSession")
 	private Session session;
 	
 	public CheckLogistic() {
@@ -15,7 +33,7 @@ public class CheckLogistic {
 	}
 
 	public CheckLogistic(int idCheck, String codeCheck, String statut, boolean salleIsOk, boolean toolsIsOk,
-			String commentaires, int idRespFor, Session session) {
+			String commentaires, Responsable respLog, Session session) {
 		super();
 		this.idCheck = idCheck;
 		this.codeCheck = codeCheck;
@@ -23,7 +41,7 @@ public class CheckLogistic {
 		this.salleIsOk = salleIsOk;
 		this.toolsIsOk = toolsIsOk;
 		this.commentaires = commentaires;
-		this.idRespFor = idRespFor;
+		this.respLog = respLog;
 		this.session = session;
 	}
 
@@ -75,12 +93,12 @@ public class CheckLogistic {
 		this.commentaires = commentaires;
 	}
 
-	public int getIdRespFor() {
-		return idRespFor;
+	public Responsable getRespLog() {
+		return respLog;
 	}
 
-	public void setIdRespFor(int idRespFor) {
-		this.idRespFor = idRespFor;
+	public void setRespLog(Responsable respLog) {
+		this.respLog = respLog;
 	}
 
 	public Session getSession() {

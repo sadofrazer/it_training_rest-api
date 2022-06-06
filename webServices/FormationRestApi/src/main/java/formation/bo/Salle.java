@@ -1,12 +1,27 @@
 package formation.bo;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Salle {
+	
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idSalle;
+	@Column(nullable = false)
 	private String codeSalle;
-	private String nom;
+	private String nomSalle;
 	private String statut;
+	
+	@Column(nullable = false)
 	private int nbrePlaces;
+	
+	@Column(nullable = false)
 	private String ville;
+	
 	private String adresse;
 	private String commentaires;
 	
@@ -14,12 +29,12 @@ public class Salle {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Salle(int idSalle, String codeSalle, String nom, String statut, int nbrePlaces, String ville, String adresse,
+	public Salle(int idSalle, String codeSalle, String nomSalle, String statut, int nbrePlaces, String ville, String adresse,
 			String commentaires) {
 		super();
 		this.idSalle = idSalle;
 		this.codeSalle = codeSalle;
-		this.nom = nom;
+		this.nomSalle = nomSalle;
 		this.statut = statut;
 		this.nbrePlaces = nbrePlaces;
 		this.ville = ville;
@@ -43,12 +58,12 @@ public class Salle {
 		this.codeSalle = codeSalle;
 	}
 
-	public String getNom() {
-		return nom;
+	public String getnomSalle() {
+		return nomSalle;
 	}
 
-	public void setNom(String nom) {
-		this.nom = nom;
+	public void setnomSalle(String nomSalle) {
+		this.nomSalle = nomSalle;
 	}
 
 	public String getStatut() {
