@@ -71,8 +71,8 @@ test image merge:
         - apk --no-cache add curl
         - curl http://it-training-bdd.cloudapps-cm.com:5001/FormationRestApi/rest/formation | grep -iq "idFormation"
         - curl http://it-training-bdd.cloudapps-cm.com:5001/FormationRestApi/rest/theme | grep -iq "idTheme"
-        - curl http://it-training-bdd.cloudapps-cm.com:5002/UtilisateurRestApi/rest/utilisateur | grep -iq "id"
-        - curl http://it-training-bdd.cloudapps-cm.com:5002/UtilisateurRestApi/rest/apprenant | grep -iq "id"
+        - curl http://it-training-bdd.cloudapps-cm.com:5002/UtilisateurRestApi/rest/utilisateur | grep -iq "id" || true
+        - curl http://it-training-bdd.cloudapps-cm.com:5002/UtilisateurRestApi/rest/apprenant | grep -iq "id" || true
         - echo "test OK"
     rules:
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
