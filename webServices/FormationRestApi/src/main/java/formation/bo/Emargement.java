@@ -1,8 +1,17 @@
 package formation.bo;
 
 import java.time.LocalDate;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
+@Entity
 public class Emargement {
+	
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idEmargement;
 	private String codeEmarg;
 	private String nom;
@@ -10,14 +19,17 @@ public class Emargement {
 	private String periode;
 	private String statut;
 	private boolean presenceIsOk;
-	private boolean inscription;
+	
+	@ManyToOne
+	@JoinColumn(name="idInscription")
+	private Inscription inscription;
 	
 	public Emargement() {
 		// TODO Auto-generated constructor stub
 	}
 
 	public Emargement(int idEmargement, String codeEmarg, String nom, LocalDate dateSign, String periode, String statut,
-			boolean presenceIsOk, boolean inscription) {
+			boolean presenceIsOk, Inscription inscription) {
 		super();
 		this.idEmargement = idEmargement;
 		this.codeEmarg = codeEmarg;
@@ -85,13 +97,13 @@ public class Emargement {
 		this.presenceIsOk = presenceIsOk;
 	}
 
-	public boolean isInscription() {
+	public Inscription getInscription() {
 		return inscription;
 	}
 
-	public void setInscription(boolean inscription) {
+	public void setInscription(Inscription inscription) {
 		this.inscription = inscription;
 	}
-	
+
 	
 }

@@ -1,23 +1,45 @@
 package formation.bo;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.Proxy;
+
+@Entity
+@Proxy(lazy=false)
 public class SousTheme {
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idStheme;
+	@Column(nullable = false)
 	private String codeStheme;
+	@Column(nullable = false)
 	private String nom;
 	private String description;
-	private Theme Theme;
+	
+	@ManyToOne
+	@JoinColumn(name = "idTheme")
+	private Theme theme;
+	
+	/*@OneToMany(mappedBy = "stheme")
+	@Basic(fetch = FetchType.LAZY)
+	private List<Formation> formations;*/
 	
 	public SousTheme() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public SousTheme(int idStheme, String codeStheme, String nom, String description, Theme Theme) {
+	public SousTheme(int idStheme, String codeStheme, String nom, String description, Theme theme) {
 		super();
 		this.idStheme = idStheme;
 		this.codeStheme = codeStheme;
 		this.nom = nom;
 		this.description = description;
-		this.Theme = Theme;
+		this.theme = theme;
 	}
 
 	public int getIdStheme() {
@@ -53,12 +75,12 @@ public class SousTheme {
 	}
 
 	public Theme getTheme() {
-		return Theme;
+		return theme;
 	}
 
-	public void setTheme(Theme Theme) {
-		this.Theme = Theme;
+	public void setTheme(Theme theme) {
+		this.theme = theme;
 	}
-	
+
 	
 }

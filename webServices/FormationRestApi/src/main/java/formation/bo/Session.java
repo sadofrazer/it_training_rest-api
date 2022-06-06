@@ -2,8 +2,19 @@ package formation.bo;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+@Entity
 public class Session {
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idSession;
+	@Column(nullable = false)
 	private String codeSession;
 	private String nom;
 	private String description;
@@ -12,16 +23,28 @@ public class Session {
 	private LocalDate dateDebut;
 	private LocalDate dateFin;
 	private float prix;
-	private int idRespFor;
+	
+	@ManyToOne
+	@JoinColumn(name="idRespFor")
+	private Responsable respFor;
+	
+	@ManyToOne
+	@JoinColumn(name = "idFormation")
 	private Formation formation;
-	private int idFormateur;
+	
+	/*@OneToMany(mappedBy = "session")
+	private List<Inscription> inscriptions;*/
+	
+	@ManyToOne
+	@JoinColumn(name="idFormateur")
+	private Formateur formateur;
 	
 	public Session() {
 		// TODO Auto-generated constructor stub
 	}
 
 	public Session(int idSession, String codeSession, String nom, String description, String statut, String type,
-			LocalDate dateDebut, LocalDate dateFin, float prix, int idRespFor, Formation formation, int idFormateur) {
+			LocalDate dateDebut, LocalDate dateFin, float prix, Responsable respFor, Formation formation, Formateur formateur) {
 		super();
 		this.idSession = idSession;
 		this.codeSession = codeSession;
@@ -32,9 +55,9 @@ public class Session {
 		this.dateDebut = dateDebut;
 		this.dateFin = dateFin;
 		this.prix = prix;
-		this.idRespFor = idRespFor;
+		this.respFor = respFor;
 		this.formation = formation;
-		this.idFormateur = idFormateur;
+		this.formateur = formateur;
 	}
 
 	public int getIdSession() {
@@ -109,12 +132,12 @@ public class Session {
 		this.prix = prix;
 	}
 
-	public int getIdRespFor() {
-		return idRespFor;
+	public Responsable getRespFor() {
+		return respFor;
 	}
 
-	public void setIdRespFor(int idRespFor) {
-		this.idRespFor = idRespFor;
+	public void setRespFor(Responsable respFor) {
+		this.respFor = respFor;
 	}
 
 	public Formation getFormation() {
@@ -125,12 +148,28 @@ public class Session {
 		this.formation = formation;
 	}
 
-	public int getIdFormateur() {
-		return idFormateur;
+	public Formateur getIdFormateur() {
+		return formateur;
 	}
 
-	public void setIdFormateur(int idFormateur) {
-		this.idFormateur = idFormateur;
+	public void setIdFormateur(Formateur formateur) {
+		this.formateur = formateur;
+	}
+
+	/*public List<Inscription> getInscriptions() {
+		return inscriptions;
+	}
+
+	public void setInscriptions(List<Inscription> inscriptions) {
+		this.inscriptions = inscriptions;
+	}*/
+
+	public Formateur getFormateur() {
+		return formateur;
+	}
+
+	public void setFormateur(Formateur formateur) {
+		this.formateur = formateur;
 	}
 	
 }

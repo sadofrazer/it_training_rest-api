@@ -2,7 +2,7 @@
 -- suppression des precedentes valeurs entrees dans la base de donnees
 
 DELETE FROM `Utilisateur`;
-DELETE FROM `TypeUtilisateur`;
+DELETE FROM `TypeUser`;
 DELETE FROM `Operations`;
 DELETE FROM `Domaine`;
 DELETE FROM `Theme`;
@@ -40,49 +40,49 @@ INSERT INTO Theme (codeTheme, nom,`description`, idDomaine)
 VALUES('TINF00003','Cloud computing', 'Formations Cloud computing', 1);
 
 -- SousThemes
-INSERT INTO SousTheme (codeSthem, nom,`description`, idTheme) 
+INSERT INTO SousTheme (codeStheme, nom,`description`, idTheme) 
 VALUES('STINF00001', 'Création de sites web', 'Formations Création de sites web', 1);
 
-INSERT INTO SousTheme (codeSthem, nom,`description`, idTheme) 
+INSERT INTO SousTheme (codeStheme, nom,`description`, idTheme) 
 VALUES('STINF00002', 'Intégration et déploiement continue', 'Formations Intégration continue', 2);
 
-INSERT INTO SousTheme (codeSthem, nom,`description`, idTheme) 
+INSERT INTO SousTheme (codeStheme, nom,`description`, idTheme) 
 VALUES('STINF00003', 'Amazon Web Services', 'Formations Amazon Web Services', 3);
 
 -- TypeUtilisateur
-INSERT INTO TypeUtilisateur (nom, `description`) 
+INSERT INTO TypeUser (nom, `description`) 
 VALUES ('Responsable', "Responsable ayant un certain niveau d'exploitation sur l'application");
 
-INSERT INTO TypeUtilisateur (nom, `description`) 
+INSERT INTO TypeUser (nom, `description`) 
 VALUES ('APPRENANT', "Client devant consommer des produits ou formations du site");
 
-INSERT INTO TypeUtilisateur (nom, `description`) 
+INSERT INTO TypeUser (nom, `description`) 
 VALUES ('FORMATEUR', "Intervenant devant animer des formations");
 
 -- Utilisateur
-INSERT INTO Utilisateur (codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, certifications, dernierDiplome,
-statut, `login`, `password`, societe, idTypeUser) 
-VALUES ('USER0001', 'sado', 'frazer','','frazer@frazer.fr',NULL,'','','','ACTIVE','sadofrazer','ittraining@123', 'IT TRAINING', 1);
+INSERT INTO Utilisateur (`type`, codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, certifications, dernierDiplome,
+statut, `login`, `password`, societe, idType, fonction) 
+VALUES ('RESP','USER0001', 'sado', 'frazer','','frazer@frazer.fr',NULL,'','','','ACTIVE','sadofrazer','ittraining@123', 'IT TRAINING', 1, 'Admin');
 
-INSERT INTO Utilisateur (codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, certifications, dernierDiplome,
-statut, `login`, `password`, societe, idTypeUser) 
-VALUES ('USER0002', 'Michel', 'Bouari','','michel@michel.com',NULL,'','','','ACTIVE','b.michel','michel@123', 'IT TRAINING', 1);
+INSERT INTO Utilisateur (`type`,codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, certifications, dernierDiplome,
+statut, `login`, `password`, societe, idType, fonction) 
+VALUES ('RESP','USER0002', 'Michel', 'Bouari','','michel@michel.com',NULL,'','','','ACTIVE','b.michel','michel@123', 'IT TRAINING', 1, 'RESP CAT');
 
-INSERT INTO Utilisateur (codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, certifications, dernierDiplome,
-statut, `login`, `password`, societe, idTypeUser) 
-VALUES ('USER0003', 'Guillaume', 'TSAGUE','','tsague@tsague.net',NULL,'','','','ACTIVE','t.guillaume','guillaume@123', 'IT TRAINING', 1);
+INSERT INTO Utilisateur (`type`,codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, certifications, dernierDiplome,
+statut, `login`, `password`, societe, idType, fonction) 
+VALUES ('RESP','USER0003', 'Guillaume', 'TSAGUE','','tsague@tsague.net',NULL,'','','','ACTIVE','t.guillaume','guillaume@123', 'IT TRAINING', 1, 'RESP FORM');
 
-INSERT INTO Utilisateur (codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, certifications, dernierDiplome,
-statut, `login`, `password`, societe, idTypeUser) 
-VALUES ('USER0004', 'jean', 'LAPORTE','','jean@jean.cm',NULL,'','','','ACTIVE','l.jean','jean@123', 'IT TRAINING', 1);
+INSERT INTO Utilisateur (`type`,codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, certifications, dernierDiplome,
+statut, `login`, `password`, societe, idType, fonction) 
+VALUES ('RESP','USER0004', 'jean', 'LAPORTE','','jean@jean.cm',NULL,'','','','ACTIVE','l.jean','jean@123', 'IT TRAINING', 1, 'RESP LOG');
 
-INSERT INTO Utilisateur (codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, certifications, dernierDiplome,
-statut, `login`, `password`, societe, idTypeUser) 
-VALUES ('USER0005', 'Mathieu', 'NGASSA','+331789900','test@test.com',STR_TO_DATE('10-May-2005', '%d-%M-%Y'),'244434555','','BAC +2','ACTIVE','n.mathieu','mathieu@123', 'GLOB CONSULTING', 2);
+INSERT INTO Utilisateur (`type`, codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, certifications, dernierDiplome,
+statut, `login`, `password`, societe, idType) 
+VALUES ('APP', 'USER0005', 'Mathieu', 'NGASSA','+331789900','test@test.com',STR_TO_DATE('10-May-2005', '%d-%M-%Y'),'244434555','','BAC +2','ACTIVE','n.mathieu','mathieu@123', 'GLOB CONSULTING', 2);
 
-INSERT INTO Utilisateur (codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, certifications, dernierDiplome,
-statut, `login`, `password`, societe, idTypeUser) 
-VALUES ('USER0006', 'Etienne', 'CASSIN','','etienne@etienne.com',NULL,'','','JAVA Certified','ACTIVE','c.etienne','etienne@123', 'Dreams', 3);
+INSERT INTO Utilisateur (`type`, codeUser, nom, prenom, telephone, email, dateNaiss, numeroSiret, certifications, dernierDiplome,
+statut, `login`, `password`, societe, idType) 
+VALUES ('FORM', 'USER0006', 'Etienne', 'CASSIN','','etienne@etienne.com',NULL,'','','JAVA Certified','ACTIVE','c.etienne','etienne@123', 'Dreams', 3);
 
 -- Formation
 INSERT INTO Formation (codeFormation, nom,`description`, `nbreJrs`, idStheme, idRespCat) 
@@ -98,14 +98,14 @@ VALUES("FOR00003", "Amazon Web Services (AWS) - Architecture avancé",
 "Amazon Web Services (AWS) - Architecture avancée; Concevoir des solutions complexes" ,3, 3, 2);
 
 -- Salle
-INSERT INTO Salle (codeSalle, adresse, nomSalle, nbrePlaces, statut) 
-VALUES ('NTE0001', 'NANTES', 'LA BEAUJOIRE', 12, 'RESERVED');
+INSERT INTO Salle (codeSalle, adresse, nomSalle, nbrePlaces, statut, ville) 
+VALUES ('NTE0001', '44000 NANTES', 'LA BEAUJOIRE', 12, 'RESERVED', 'NANTES');
 
-INSERT INTO Salle (codeSalle, adresse, nomSalle, nbrePlaces, statut) 
-VALUES ('NTE0002', 'NANTES', 'ATLANTIS', 10, 'RESERVED');
+INSERT INTO Salle (codeSalle, adresse, nomSalle, nbrePlaces, statut, ville) 
+VALUES ('NTE0002', '44230 Saint Seb', 'ATLANTIS', 10, 'RESERVED', 'NANTES');
 
-INSERT INTO Salle (codeSalle, adresse, nomSalle, nbrePlaces, statut) 
-VALUES ('NTE0003', 'NANTES', 'MANGIN', 4, 'FREE');
+INSERT INTO Salle (codeSalle, adresse, nomSalle, nbrePlaces, statut, ville) 
+VALUES ('NTE0003', '44000 NANTES', 'MANGIN', 4, 'FREE', 'NANTES');
 
 -- Session
 INSERT INTO `Session` (codeSession, nom, `description`, statut, `type`, dateDebut, dateFin, prix, idRespFor, idFormateur, idFormation)

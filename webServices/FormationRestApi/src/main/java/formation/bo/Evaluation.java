@@ -1,46 +1,61 @@
 package formation.bo;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+@Entity
 public class Evaluation {
-	private int idEvaluation;
-	private String codeEvaluation;
+	
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int idEval;
+	@Column(nullable = false)
+	private String codeEval;
 	private String nom;
 	private String dateEval;
 	private String description;
 	private String statut;
-	private boolean EvalIsOk;
-	private boolean inscription;
+	private boolean evalIsOk;
+	
+	@ManyToOne
+	@JoinColumn(name="idInscription")
+	private Inscription inscription;
 	
 	public Evaluation() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Evaluation(int idEvaluation, String codeEvaluation, String nom, String dateEval, String description,
-			String statut, boolean evalIsOk, boolean inscription) {
+	public Evaluation(int idEval, String codeEval, String nom, String dateEval, String description,
+			String statut, boolean evalIsOk, Inscription inscription) {
 		super();
-		this.idEvaluation = idEvaluation;
-		this.codeEvaluation = codeEvaluation;
+		this.idEval = idEval;
+		this.codeEval = codeEval;
 		this.nom = nom;
 		this.dateEval = dateEval;
 		this.description = description;
 		this.statut = statut;
-		EvalIsOk = evalIsOk;
+		this.evalIsOk = evalIsOk;
 		this.inscription = inscription;
 	}
 
-	public int getIdEvaluation() {
-		return idEvaluation;
+	public int getIdEval() {
+		return idEval;
 	}
 
-	public void setIdEvaluation(int idEvaluation) {
-		this.idEvaluation = idEvaluation;
+	public void setIdEval(int idEvaluation) {
+		this.idEval = idEvaluation;
 	}
 
-	public String getCodeEvaluation() {
-		return codeEvaluation;
+	public String getCodeEval() {
+		return codeEval;
 	}
 
-	public void setCodeEvaluation(String codeEvaluation) {
-		this.codeEvaluation = codeEvaluation;
+	public void setCodeEval(String codeEval) {
+		this.codeEval = codeEval;
 	}
 
 	public String getNom() {
@@ -76,19 +91,23 @@ public class Evaluation {
 	}
 
 	public boolean isEvalIsOk() {
-		return EvalIsOk;
+		return evalIsOk;
 	}
 
 	public void setEvalIsOk(boolean evalIsOk) {
-		EvalIsOk = evalIsOk;
+		this.evalIsOk = evalIsOk;
 	}
 
-	public boolean isInscription() {
+	public Inscription getInscription() {
 		return inscription;
 	}
 
-	public void setInscription(boolean inscription) {
+	public void setInscription(Inscription inscription) {
 		this.inscription = inscription;
 	}
+
+	
+
+	
 	
 }

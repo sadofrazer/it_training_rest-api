@@ -4,36 +4,28 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import formation.bo.Theme;
-import formation.dal.theme.ThemeDAO;
-import formation.dal.theme.ThemeJdbcImpl;
-
+import formation.dal.ThemeDAO;
 
 @Service
-public class ThemeBll implements ThemeDAO {
-	
+public class ThemeBLL {
 	@Autowired
-	private ThemeJdbcImpl dao;
+	private ThemeDAO dao;
 	
-	public ThemeBll() {
-		//dao = new ThemeJdbcImpl();
-		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	public List<Theme> selectAll() {
+		return dao.findAll();
 	}
 	
-	@Override
-	public Theme getThemeById(int id) {
-		if(id>0) {
-			return dao.getThemeById(id);
+	public Theme selectById(int id) {
+		if(exist(id)) {
+			return dao.findById(id).get();
 		}else {
 			return null;
 		}
 	}
-
-	@Override
-	public List<Theme> selectAll() {
-		return dao.selectAll();
+	
+	public boolean exist(int id) {
+		return dao.existsById(id);
 	}
-
 }

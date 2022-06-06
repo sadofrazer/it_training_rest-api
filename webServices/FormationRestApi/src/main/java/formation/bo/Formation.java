@@ -1,39 +1,66 @@
 package formation.bo;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.Proxy;
+
+@Entity
+@Proxy(lazy=false)
 public class Formation {
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idFormation;
-	private String codeForm;
+	@Column(nullable = false)
+	private String codeFormation;
+	@Column(nullable = false)
 	private String nom;
 	private String description;
+	
+	@Column(nullable = false)
 	private int nbreJrs;
+	
+	@ManyToOne
+	@JoinColumn(name = "idStheme")
 	private SousTheme stheme;
-	private int idRespCat;
+	
+	/*@OneToMany(mappedBy = "formation")
+	@Basic(fetch = FetchType.LAZY)
+	private List<Session> sessions;*/
+	
+	@ManyToOne
+	@JoinColumn(name="idRespCat")
+	private Responsable respCat;
 	
 	public Formation() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Formation(int idFormation, String codeForm, String nom, String description,int nbrejrs, SousTheme stheme,
-			int idRespCat) {
+	public Formation(int idFormation, String codeFormation, String nom, String description,int nbrejrs, SousTheme stheme,
+		Responsable respCat) {
 		super();
 		this.idFormation = idFormation;
-		this.codeForm = codeForm;
+		this.codeFormation = codeFormation;
 		this.nom = nom;
 		this.description = description;
 		this.nbreJrs=nbrejrs;
 		this.stheme = stheme;
-		this.idRespCat = idRespCat;
+		this.respCat = respCat;
 	}
 	
-	public Formation(String codeForm, String nom, String description,int nbrejrs, SousTheme stheme,
-			int idRespCat) {
+	public Formation(String codeFormation, String nom, String description,int nbrejrs, SousTheme stheme,
+			Responsable respCat) {
 		super();
-		this.codeForm = codeForm;
+		this.codeFormation = codeFormation;
 		this.nom = nom;
 		this.description = description;
 		this.nbreJrs=nbrejrs;
 		this.stheme = stheme;
-		this.idRespCat = idRespCat;
+		this.respCat = respCat;
 	}
 
 	public int getIdFormation() {
@@ -43,13 +70,13 @@ public class Formation {
 	public void setIdFormation(int idFormation) {
 		this.idFormation = idFormation;
 	}
-
-	public String getCodeForm() {
-		return codeForm;
+	
+	public String getCodeFormation() {
+		return codeFormation;
 	}
 
-	public void setCodeForm(String codeForm) {
-		this.codeForm = codeForm;
+	public void setCodeFormation(String codeFormation) {
+		this.codeFormation = codeFormation;
 	}
 
 	public String getNom() {
@@ -76,12 +103,13 @@ public class Formation {
 		this.stheme = stheme;
 	}
 
-	public int getIdRespCat() {
-		return idRespCat;
+	
+	public Responsable getRespCat() {
+		return respCat;
 	}
 
-	public void setIdRespCat(int idRespCat) {
-		this.idRespCat = idRespCat;
+	public void setRespCat(Responsable respCat) {
+		this.respCat = respCat;
 	}
 
 	public int getNbreJrs() {
@@ -91,5 +119,12 @@ public class Formation {
 	public void setNbreJrs(int nbrejrs) {
 		this.nbreJrs = nbrejrs;
 	}
+
+	@Override
+	public String toString() {
+		return "Formation [idFormation=" + idFormation + ", codeFormation=" + codeFormation + ", nom=" + nom + ", description="
+				+ description + ", nbreJrs=" + nbreJrs + ", stheme=" + stheme + ", idRespCat=" + respCat + "]";
+	}
+
 	
 }

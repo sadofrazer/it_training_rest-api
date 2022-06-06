@@ -4,35 +4,29 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import formation.bo.SousTheme;
-import formation.dal.stheme.SthemeDAO;
-import formation.dal.stheme.SthemeJdbcImpl;
+import formation.dal.SthemeDAO;
+
 
 @Service
-public class SthemeBll implements SthemeDAO {
-	
+public class SthemeBLL {
 	@Autowired
-	private SthemeJdbcImpl dao ;
+	private SthemeDAO dao;
 	
-	public SthemeBll() {
-		//dao = new SthemeJdbcImpl();
-		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	public List<SousTheme> selectAll() {
+		return dao.findAll();
 	}
-
-	@Override
-	public SousTheme getSthemeById(int id) {
-		if(id>0) {
-			return dao.getSthemeById(id);
+	
+	public SousTheme selectById(int id) {
+		if(exist(id)) {
+			return dao.findById(id).get();
 		}else {
 			return null;
 		}
 	}
-
-	@Override
-	public List<SousTheme> selectAll() {
-		return dao.selectAll();
+	
+	public boolean exist(int id) {
+		return dao.existsById(id);
 	}
-
 }

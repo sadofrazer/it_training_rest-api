@@ -3,115 +3,108 @@ package formation.bll;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import formation.bo.Formation;
 import formation.dal.FormationDAO;
-import formation.dal.FormationJdbcImpl;
 
 @Service
-public class FormationBll implements FormationDAO {
-	
+public class FormationBLL {
 	@Autowired
-	private FormationJdbcImpl dao ;
+	private FormationDAO dao;
 	
-	public FormationBll() {
-		//dao = new FormationJdbcImpl();
-		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	public List<Formation> selectAll() {
+		return dao.findAll();
 	}
 	
-	@Override
-	public Formation getFormationById(int id) {
-		if(id>0) {
-			return dao.getFormationById(id);
+	public Formation selectById(int id) {
+		if(exist(id)) {
+			return dao.findById(id).get();
 		}else {
 			return null;
 		}
 	}
-
-	@Override
-	public List<Formation> selectAllFormations() {
-		return dao.selectAllFormations();
+	
+	public boolean insert(Formation f) {
+		
+		if( f.getCodeFormation() != null && (selectByCode(f.getCodeFormation()) != null) && f.getNom()!=null && f.getStheme()!=null ) {
+			dao.save(f);
+			return true;
+		}else {
+			System.err.println("impossible d'ajouter cette formation car ce code formation existe déja");
+			return false;
+		}
 	}
 	
-	public List<Formation> getAllOrderBy(String order) {
-		System.out.println("valeur si initiale " + order);
-		if(order!=null) {
-			if("codeForm".equals(order) || "code".equals(order)) {
-				order = "codeFormation";
-				return dao.getAllOrderBy(order);
-			}
-			if("nomForm".equals(order) || "nom".equals(order)) {
-				order = "nom";
-				return dao.getAllOrderBy(order);
-			}
-			if("stheme".equals(order) || "theme".equals(order)) {
-				order = "nomStheme";
-				return dao.getAllOrderBy(order);
-			}
-		}
-			
-		return dao.getAllOrderBy("nom");	
-	}
-
-	@Override
-	public boolean insertFormation(Formation formation) {
+	public boolean update(Formation f) {
 		
-		if(formation.getIdRespCat()>0 && formation.getStheme()!=null && formation.getCodeForm()!=null && formation.getNbreJrs()>0 && !dao.codeExist(formation.getCodeForm())) {
-			return dao.insertFormation(formation);
-			//return true;
+		if( f.getCodeFormation() != null && f.getNom()!=null && f.getStheme()!=null ) {
+			if( exist(f.getIdFormation()) && !(f.getCodeFormation().equals(dao.findById(f.getIdFormation()).get().getCodeFormation()))) {
+				if(selectByCode(f.getCodeFormation()) != null ) {
+					System.err.println("Désolé vous ne pouvez pas modifier une formation en utilisant un code formation existant déja en Base");
+					return false;
+				}
+			}
+			dao.save(f);
+			return true;
 		}else {
-			System.err.println("Impossible d'ajouter cette formation car ID RespCat ou ID Theme est pas valide ou alors ce Code Formation existe déja");
+			System.err.println("Le code formation, ou le nom ou le sous thème ne peuvent pas etre null");
 			return false;
 		}
 	}
-
-	@Override
-	public boolean updateFormation(Formation formation) {
-		
-		//System.out.println(formation.getIdRespCat() +"    " + formation.getStheme().getIdStheme() + "     " +formation.getCodeForm());
-		
-		if(formation.getIdRespCat()>0 && formation.getStheme()!=null && formation.getCodeForm()!=null && formation.getNbreJrs()>0 && formation.getIdRespCat()>0) {
-			return dao.updateFormation(formation);
+	
+	
+	public boolean delete(int id) {
+		if(exist(id)) {
+			dao.deleteById(id);
+			return true;
 		}else {
-			System.err.println("Impossible de modifier cette formation d'Id : " + formation.getIdFormation());
+			System.err.println("Impossible de supprimer cet ID ( " + id + " ) car il existe pas en Base");
 			return false;
 		}
 	}
-
-	@Override
-	public boolean deleteFormation(int id) {
-		if(id>0 && idExist(id)) {
-			return dao.deleteFormation(id);
-			//return true;
-		}else {
-			return false;
-		}
+	
+	public boolean exist(int id) {
+		return dao.existsById(id);
 	}
-
-	@Override
-	public List<Formation> searchByParams(String codeForm, String nomForm, String nomStheme) {
-		if(codeForm != null && nomForm != null && nomStheme !=null) {
-			return dao.searchByParams(codeForm, nomForm, nomStheme);
+	
+	public List<Formation> searchForm(String word){
+		return dao.findByNomContainingOrCodeFormationContainingOrSthemeNomContaining(word, word, word);
+	}
+	
+	public List<Formation> filterForm(String nom, String code, String stheme){
+		return dao.findByNomContainingAndCodeFormationContainingAndSthemeNomContaining(nom, code, stheme);
+	}
+	
+	//recherche les formation en fonction du nom, code, et nom du sous theme et les tri selon l'ordre passé en paramètre
+	public List<Formation> sortForm(String nom, String code, String stheme, String sort){
+		return dao.findByAndSort(("%"+nom+"%"), "%"+code+"%", "%"+stheme+"%", Sort.by(sort));
+	}
+	
+	//retourne la formation correspondante au code passé en paramètre
+	public Formation selectByCode(String code) {
+		
+		if(dao.findByCodeFormation(code).size()>0) {
+			return dao.findByCodeFormation(code).get(0);
 		}else {
+			System.err.println("Aucune formation correspondante au code " + code + " n'a été trouvée en Base");
 			return null;
 		}
 	}
-
-
-	@Override
-	public boolean idExist(int id) {
-		if(id>0) {
-			return dao.idExist(id);
-		}else {
-			return false;
-		}
+	
+	//Liste des fromation par domaine
+	public List<Formation> getFormByDomaine(int id){
+		return dao.findBySthemeThemeDomaineIdDomaine(id);
 	}
 	
-	public boolean codeExist(String codeForm) {
-		
-		return dao.codeExist(codeForm);
+	//Liste des formations par thème
+	public List<Formation> getFormByTheme(int id){
+		return dao.findBySthemeThemeIdTheme(id);
 	}
-
+	
+	//Liste des formations par sous thèmes
+	public List<Formation> getFormByStheme(int id){
+		return dao.findBySthemeIdStheme(id);
+	}
 }
