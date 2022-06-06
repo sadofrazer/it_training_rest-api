@@ -26,6 +26,14 @@ public class SthemeBLL {
 		}
 	}
 	
+	public List<SousTheme> getByTheme(int id){
+		if(exist(id)) {
+			return dao.findByThemeIdTheme(id);
+		}else {
+			return null;
+		}
+	}
+	
 	//if id exist in database return true, else retrun false
 	public boolean exist(int id) {
 		return dao.existsById(id);

@@ -47,6 +47,7 @@ test image formation:
         - docker load < FormationRestApi_public.tar
         - docker images
         - sh del_containers.sh
+        - sleep 2
         - docker run --name $CONTAINER_NAME_FORMATION -d -p 5001:8080 $IMAGE_NAME_FORMATION
         - sleep 5
         - apk --no-cache add curl
@@ -65,6 +66,7 @@ test image merge:
         #- docker load < FormationRestApi_public.tar
         - docker images
         - sh del_containers.sh
+        - sleep 2
         - docker run --name $CONTAINER_NAME_FORMATION -d -p 5001:8080 $IMAGE_NAME_FORMATION
         - docker run --name $CONTAINER_NAME_UTILISATEUR -d -p 5002:8080 $IMAGE_NAME_UTILISATEUR
         - sleep 5
@@ -154,6 +156,7 @@ test image user:
         - docker load < UtilisateurRestApi_public.tar
         - docker images
         - sh del_containers.sh
+        - sleep 2
         - docker run --name $CONTAINER_NAME_UTILISATEUR -d -p 5002:8080 $IMAGE_NAME_UTILISATEUR
         - sleep 5
         - apk --no-cache add curl

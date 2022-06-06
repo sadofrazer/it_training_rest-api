@@ -43,4 +43,21 @@ public class SthemeRest {
 			return new ResponseEntity<SousTheme>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	
+	@GetMapping(value = "/theme/{id}")
+	public ResponseEntity<List<SousTheme>> findByTheme(@PathVariable("id") int id) {
+		
+		if (bll.exist(id)) {
+			try {
+				return new ResponseEntity<List<SousTheme>>(bll.getByTheme(id), HttpStatus.OK);
+			}
+			catch (Exception e) {
+				return new ResponseEntity<List<SousTheme>>(HttpStatus.CONFLICT);
+			}
+		} else {
+			return new ResponseEntity<List<SousTheme>>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
 }
