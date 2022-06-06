@@ -1,4 +1,4 @@
-FROM maven:3.8.5-openjdk-17 as build
+FROM maven:3.8.5-openjdk-18-slim as build
 LABEL name="sadofrazer"
 RUN mkdir /opt/FormationRestApi
 WORKDIR /opt/FormationRestApi
@@ -12,7 +12,8 @@ ENV DB_PORT=3306
 #RUN sed -ri -e 's!url="jdbc:mysql://it-training-bdd.cloudapps-cm.com:3306/it_training_bdd"!url="jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}"!g' /opt/FormationRestApi/src/main/webapp/META-INF/context.xml
 #RUN sed -ri -e 's!username="frazer"!username=${DB_USER}!g' /opt/FormationRestApi/src/main/webapp/META-INF/context.xml
 #RUN sed -ri -e 's!password="frazer@123"!password=${DB_PASSWORD}!g' /opt/FormationRestApi/src/main/webapp/META-INF/context.xml
-RUN mvn clean install
+RUN mvn clean 
+RUN mvn install
 RUN mvn package
 RUN cp /opt/FormationRestApi/target/FormationRestApi.war /opt/FormationRestApi.war
 
