@@ -65,6 +65,7 @@ public class FormationBLL {
 		}
 	}
 	
+	//if id exist in database return true, else retrun false
 	public boolean exist(int id) {
 		return dao.existsById(id);
 	}
