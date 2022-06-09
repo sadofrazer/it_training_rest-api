@@ -33,10 +33,10 @@ build dockerhub formation:
       - runner-prod
     script:
         - docker build -t ${IMAGE_NAME_FORMATION} webServices/FormationRestApi/
-        - docker save ${IMAGE_NAME_FORMATION} > FormationRestApi_public.tar
-    artifacts:
-        paths:
-            - FormationRestApi_public.tar
+        #- docker save ${IMAGE_NAME_FORMATION} > FormationRestApi_public.tar
+    #artifacts:
+      #  paths:
+        #    - FormationRestApi_public.tar
 
 test image formation:
     stage: Test Image
@@ -44,7 +44,7 @@ test image formation:
       - runner-prod
     script:
         - echo 'Test Image'
-        - docker load < FormationRestApi_public.tar
+        #- docker load < FormationRestApi_public.tar
         - docker images
         - sh del_containers.sh
         - sleep 2
@@ -84,8 +84,6 @@ Release all:
     tags:
       - runner-prod
     script:
-        - docker load < FormationRestApi_public.tar
-        - docker load < UtilisateurRestApi_public.tar
         - docker login -u sadofrazer -p ${PASSWORD}
         - docker push ${IMAGE_NAME_FORMATION}
         - docker push ${IMAGE_NAME_UTILISATEUR}

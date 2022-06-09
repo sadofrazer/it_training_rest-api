@@ -1,5 +1,6 @@
 package formation.bo;
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,10 +16,13 @@ import org.hibernate.annotations.Proxy;
 public class SousTheme {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idStheme;
-	@Column(nullable = false)
+
+	@Column(nullable = false, unique = true)
 	private String codeStheme;
+	
 	@Column(nullable = false)
 	private String nom;
+	
 	private String description;
 	
 	@ManyToOne
