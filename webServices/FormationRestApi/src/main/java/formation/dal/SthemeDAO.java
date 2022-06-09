@@ -11,5 +11,5 @@ import formation.bo.SousTheme;
 public interface SthemeDAO extends JpaRepository<SousTheme, Integer> {
 	
 	public List<SousTheme> findByThemeIdTheme(int id);
-
+	public SousTheme findByCodeStheme(String codeStheme);
 }
