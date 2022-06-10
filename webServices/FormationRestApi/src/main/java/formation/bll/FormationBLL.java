@@ -28,7 +28,7 @@ public class FormationBLL {
 	
 	public boolean insert(Formation f) {
 		
-		if( f.getCodeFormation() != null && (selectByCode(f.getCodeFormation()) != null) && f.getNom()!=null && f.getStheme()!=null ) {
+		if( f.getCodeFormation() != null && (selectByCode(f.getCodeFormation()) == null) && f.getNom()!=null && f.getStheme()!=null ) {
 			dao.save(f);
 			return true;
 		}else {
