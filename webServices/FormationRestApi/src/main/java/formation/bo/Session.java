@@ -14,7 +14,7 @@ import javax.persistence.ManyToOne;
 public class Session {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idSession;
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String codeSession;
 	private String nom;
 	private String description;

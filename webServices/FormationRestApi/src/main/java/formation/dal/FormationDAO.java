@@ -12,7 +12,7 @@ import formation.bo.Formation;
 @Repository
 public interface FormationDAO extends JpaRepository<Formation, Integer> {
 	
-	public List<Formation> findByNomContainingOrCodeFormationContainingOrSthemeNomContaining(String nom, String codeFormation, String nomStheme);
+	public List<Formation> findByNomContainingOrCodeFormationContainingOrSthemeNomContainingOrSthemeThemeNomContaining(String nom, String codeFormation, String nomStheme, String nomTheme);
 	public List<Formation> findByNomContainingAndCodeFormationContainingAndSthemeNomContaining(String nom, String codeFormation, String nomStheme);
 	public List<Formation> findByCodeFormation(String CodeFormation);
 	
