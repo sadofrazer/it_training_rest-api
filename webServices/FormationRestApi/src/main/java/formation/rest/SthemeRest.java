@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import formation.bll.SthemeBLL;
-import formation.bo.Formation;
 import formation.bo.SousTheme;
 
 @RestController
 @RequestMapping("/stheme")
 public class SthemeRest {
+	
 	@Autowired
 	private SthemeBLL bll;
 	
@@ -51,21 +51,19 @@ public class SthemeRest {
 	@GetMapping(value = "/theme/{id}")
 	public ResponseEntity<List<SousTheme>> findByTheme(@PathVariable("id") int id) {
 		
-		if (bll.exist(id)) {
 			try {
 				return new ResponseEntity<List<SousTheme>>(bll.getByTheme(id), HttpStatus.OK);
 			}
 			catch (Exception e) {
 				return new ResponseEntity<List<SousTheme>>(HttpStatus.CONFLICT);
 			}
-		} else {
-			return new ResponseEntity<List<SousTheme>>(HttpStatus.NOT_FOUND);
-		}
+		
 	}
 	
 	@GetMapping(value="/search")
 	@ResponseBody
 	public ResponseEntity<SousTheme> getSthemeByCode(@RequestParam(name = "code") String code) {
+		
 		try {
 			return new ResponseEntity<SousTheme>(bll.getSthemeByCode(code), HttpStatus.OK);
 		}

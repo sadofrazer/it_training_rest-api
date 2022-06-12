@@ -71,7 +71,7 @@ public class FormationBLL {
 	}
 	
 	public List<Formation> searchForm(String word){
-		return dao.findByNomContainingOrCodeFormationContainingOrSthemeNomContaining(word, word, word);
+		return dao.findByNomContainingOrCodeFormationContainingOrSthemeNomContainingOrSthemeThemeNomContaining(word, word, word,word);
 	}
 	
 	public List<Formation> filterForm(String nom, String code, String stheme){
