@@ -20,6 +20,8 @@ public class Formation {
 	@Column(nullable = false)
 	private String nom;
 	private String description;
+	private String objectifs;
+	private String programme;
 	
 	@Column(nullable = false)
 	private int nbreJrs;
@@ -118,6 +120,22 @@ public class Formation {
 
 	public void setNbreJrs(int nbrejrs) {
 		this.nbreJrs = nbrejrs;
+	}
+	
+	public String getObjectifs() {
+		return objectifs;
+	}
+
+	public void setObjectifs(String objectifs) {
+		this.objectifs = objectifs;
+	}
+
+	public String getProgramme() {
+		return programme;
+	}
+
+	public void setProgramme(String programme) {
+		this.programme = programme;
 	}
 
 	@Override

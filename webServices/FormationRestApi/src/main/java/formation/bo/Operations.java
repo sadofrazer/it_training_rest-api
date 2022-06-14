@@ -20,6 +20,8 @@ public class Operations {
 	private String nom;
 	private String description;
 	private String typeRes;
+	
+	@Column(columnDefinition = "DATE")
 	private LocalDate dateDebut;
 	
 	@ManyToOne

@@ -1,6 +1,8 @@
 package formation.bo;
 
 import java.time.LocalDate;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +17,8 @@ public class Emargement {
 	private int idEmargement;
 	private String codeEmarg;
 	private String nom;
+	
+	@Column(columnDefinition = "DATE")
 	private LocalDate dateSign;
 	private String periode;
 	private String statut;

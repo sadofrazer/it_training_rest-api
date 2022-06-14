@@ -11,7 +11,7 @@ public class Salle {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idSalle;
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String codeSalle;
 	private String nomSalle;
 	private String statut;
@@ -57,12 +57,12 @@ public class Salle {
 	public void setCodeSalle(String codeSalle) {
 		this.codeSalle = codeSalle;
 	}
-
-	public String getnomSalle() {
+	
+	public String getNomSalle() {
 		return nomSalle;
 	}
 
-	public void setnomSalle(String nomSalle) {
+	public void setNomSalle(String nomSalle) {
 		this.nomSalle = nomSalle;
 	}
 
