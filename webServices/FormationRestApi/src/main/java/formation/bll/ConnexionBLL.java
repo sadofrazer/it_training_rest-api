@@ -1,5 +1,7 @@
 package formation.bll;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import formation.bo.Utilisateur;
@@ -16,7 +18,7 @@ public class ConnexionBLL {
 		
 	}
 	
-	public Iterable<Utilisateur> getUtilisateurs() {
+	public List<Utilisateur> selectAll() {
 		return dao.findAll();
 	}
 }

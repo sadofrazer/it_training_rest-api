@@ -19,8 +19,8 @@ public class ConnexionRest {
 	private ConnexionBLL bll;
 	
 	@GetMapping
-	public Iterable<Utilisateur> getUtilisateurs() {
-		return bll.getUtilisateurs();
+	public List<Utilisateur> getUtilisateurs() {
+		return bll.selectAll();
 	}
 	
 	@GetMapping("/{login}/{password}")
