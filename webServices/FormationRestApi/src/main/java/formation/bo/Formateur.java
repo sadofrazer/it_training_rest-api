@@ -1,10 +1,7 @@
 package formation.bo;
 
-import java.util.List;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 
 @Entity
 @DiscriminatorValue(value="FORM")
@@ -12,8 +9,8 @@ public class Formateur extends Utilisateur{
 	
 	private String certifications;
 	
-	@OneToMany(mappedBy = "formateur" )
-	private List<Session> sessions;
+	/*@OneToMany(mappedBy = "formateur" )
+	private List<Session> sessions;*/
 	
 	public Formateur() {
 		// TODO Auto-generated constructor stub
@@ -27,13 +24,13 @@ public class Formateur extends Utilisateur{
 		this.certifications = certifications;
 	}
 
-	public List<Session> getSessions() {
+	/*public List<Session> getSessions() {
 		return sessions;
 	}
 
 	public void setSessions(List<Session> sessions) {
 		this.sessions = sessions;
-	}
+	}*/
 	
 	
 }

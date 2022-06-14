@@ -10,13 +10,19 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.ColumnDefault;
+
 @Entity
 public class AttribSalle {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idAttribSalle;
-	@Column(nullable = false)
+	
+	@Column(nullable = false, columnDefinition = "DATE")
 	private LocalDate dateAttrib;
+	
+	@Column(nullable = false)
+	@ColumnDefault("NEW")
 	private String statut;
 	
 	@ManyToOne

@@ -7,5 +7,6 @@ import formation.bo.AttribSalle;
 
 @Repository
 public interface AttribSalleDAO extends JpaRepository<AttribSalle, Integer>{
+	
 
 }
