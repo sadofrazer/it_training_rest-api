@@ -15,9 +15,13 @@ public class Inscription {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idInscription;
-	@Column(nullable = false)
+	
+	@Column(nullable = false, unique = true)
 	private String codeInscription;
+	
 	private String statut;
+	
+	@Column(columnDefinition = "DATE")
 	private LocalDate dateInscription;
 	
 	@ManyToOne
@@ -104,7 +108,7 @@ public class Inscription {
 	public void setApprenant(Apprenant apprenant) {
 		this.apprenant = apprenant;
 	}
-
+	
 	/*public List<Emargement> getEmargements() {
 		return emargements;
 	}

@@ -12,7 +12,7 @@ import formation.dal.SessionDAO;
 public class SessionBLL {
 	
 	@Autowired
-	public SessionDAO dao;
+	private SessionDAO dao;
 	
 	
 	public List<Session> selectAll() {
@@ -29,7 +29,7 @@ public class SessionBLL {
 	}
 	
 	
-public boolean insert(Session s) {
+	public boolean insert(Session s) {
 		
 		if( s.getCodeSession() != null && (getSessionByCode(s.getCodeSession()) == null) 
 				&& s.getNom()!=null && s.getDateDebut()!=null && s.getDateFin()!=null ) {

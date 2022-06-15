@@ -8,4 +8,6 @@ import formation.bo.Inscription;
 @Repository
 public interface InscriptionDAO extends JpaRepository<Inscription, Integer> {
 
+	public Inscription findByCodeInscription(String codeInscription);
+	
 }

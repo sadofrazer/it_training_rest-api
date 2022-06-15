@@ -1,5 +1,7 @@
 package formation.bo;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,7 +18,9 @@ public class Evaluation {
 	@Column(nullable = false)
 	private String codeEval;
 	private String nom;
-	private String dateEval;
+	@Column(columnDefinition = "DATE")
+	private LocalDate dateEval;
+	
 	private String description;
 	private String statut;
 	private boolean evalIsOk;
@@ -29,7 +33,7 @@ public class Evaluation {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Evaluation(int idEval, String codeEval, String nom, String dateEval, String description,
+	public Evaluation(int idEval, String codeEval, String nom, LocalDate dateEval, String description,
 			String statut, boolean evalIsOk, Inscription inscription) {
 		super();
 		this.idEval = idEval;
@@ -66,11 +70,11 @@ public class Evaluation {
 		this.nom = nom;
 	}
 
-	public String getDateEval() {
+	public LocalDate getDateEval() {
 		return dateEval;
 	}
 
-	public void setDateEval(String dateEval) {
+	public void setDateEval(LocalDate dateEval) {
 		this.dateEval = dateEval;
 	}
 

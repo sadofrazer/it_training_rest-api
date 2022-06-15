@@ -20,8 +20,13 @@ public class Session {
 	private String description;
 	private String statut;
 	private String type;
+	
+	@Column(columnDefinition = "DATE")
 	private LocalDate dateDebut;
+	
+	@Column(columnDefinition = "DATE")
 	private LocalDate dateFin;
+	
 	private float prix;
 	
 	@ManyToOne

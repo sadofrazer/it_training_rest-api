@@ -1,11 +1,9 @@
 package formation.bo;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 
 @Entity
 @DiscriminatorValue(value="APP")
@@ -13,8 +11,8 @@ public class Apprenant extends Utilisateur {
 	
 	private String dernierDiplome;
 	
-	@OneToMany(mappedBy = "apprenant" )
-	private List<Inscription> inscriptions;
+	/*@OneToMany(mappedBy = "apprenant" )
+	private List<Inscription> inscriptions;*/
 
 	public Apprenant(int id, String nom, String codeUser, String prenom, String adresse, String telephone,
 			String societe, LocalDate dateNaiss, String numeroSiret, String statut, String login, String password,
@@ -36,12 +34,12 @@ public class Apprenant extends Utilisateur {
 		this.dernierDiplome = dernierDiplome;
 	}
 
-	public List<Inscription> getInscriptionss() {
+	/*public List<Inscription> getInscriptionss() {
 		return inscriptions;
 	}
 
 	public void setInscriptionss(List<Inscription> inscriptionss) {
 		this.inscriptions = inscriptionss;
-	}
+	}*/
 	
 }
