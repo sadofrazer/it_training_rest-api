@@ -95,6 +95,9 @@ public class SalleBLL {
 			return false;
 		}
 	}
-
+	
+	public List<Salle> getFreeSalles(){
+		return dao.findByStatut("FREE");
+	}
 
 }
