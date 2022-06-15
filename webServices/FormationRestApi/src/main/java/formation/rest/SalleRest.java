@@ -123,6 +123,17 @@ public class SalleRest {
 		}
 	}
 	
+	@GetMapping(value="/free")
+	@ResponseBody
+	public ResponseEntity<List<Salle>> getFreeSalles() {
+		
+		try {
+			return new ResponseEntity<List<Salle>>(bll.getFreeSalles(), HttpStatus.OK);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<List<Salle>>(HttpStatus.CONFLICT);
+		}
+	}
 	
 	
 	@GetMapping(value="/exist")
