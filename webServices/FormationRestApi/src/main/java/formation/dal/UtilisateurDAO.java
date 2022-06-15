@@ -8,4 +8,5 @@ import formation.bo.Utilisateur;
 @Repository
 public interface UtilisateurDAO extends JpaRepository<Utilisateur, Integer>{
 
+	Utilisateur findByLoginAndPassword(String login, String password);
 }
