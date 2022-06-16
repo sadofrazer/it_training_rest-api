@@ -21,6 +21,9 @@ public class AttribSalle {
 	@Column(nullable = false, columnDefinition = "DATE")
 	private LocalDate dateAttrib;
 	
+	@Column(columnDefinition = "DATE")
+	private LocalDate dateModif;
+	
 	@Column(nullable = false)
 	@ColumnDefault("NEW")
 	private String statut;

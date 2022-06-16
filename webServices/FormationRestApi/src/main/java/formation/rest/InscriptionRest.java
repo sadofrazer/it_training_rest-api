@@ -142,7 +142,7 @@ public class InscriptionRest {
 	
 	
 	@GetMapping(value = "/session/{id}")
-	public ResponseEntity<List<Inscription>> getAllBySessionId(int id) {
+	public ResponseEntity<List<Inscription>> getAllBySessionId(@PathVariable("id") int id) {
 		try {
 			return new ResponseEntity<List<Inscription>>(bll.getAllBySessionId(id), HttpStatus.OK);
 		}
@@ -153,7 +153,7 @@ public class InscriptionRest {
 	
 	
 	@GetMapping(value = "/formation/{id}")
-	public ResponseEntity<List<Inscription>> getAllByFormationId(int id) {
+	public ResponseEntity<List<Inscription>> getAllByFormationId(@PathVariable("id") int id) {
 		try {
 			return new ResponseEntity<List<Inscription>>(bll.getAllByFormationId(id), HttpStatus.OK);
 		}
@@ -164,7 +164,7 @@ public class InscriptionRest {
 	
 	
 	@GetMapping(value = "/apprenant/{id}")
-	public ResponseEntity<List<Inscription>> getAllByApprenantId(int id) {
+	public ResponseEntity<List<Inscription>> getAllByApprenantId(@PathVariable("id") int id) {
 		try {
 			return new ResponseEntity<List<Inscription>>(bll.getAllByApprenantId(id), HttpStatus.OK);
 		}
