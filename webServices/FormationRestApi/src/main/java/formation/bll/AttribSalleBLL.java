@@ -30,7 +30,7 @@ public class AttribSalleBLL {
 	
 	public boolean insert(AttribSalle a) {
 		
-		if( a.getDateAttrib() != null && a.getSalle()!=null && a.getSession()!=null && a.getRespFor()!=null ) {
+		if( a.getDateAttrib() != null && a.getSalle()!=null && a.getSession()!=null) {
 			dao.save(a);
 			return true;
 		}else {
@@ -41,7 +41,7 @@ public class AttribSalleBLL {
 	
 	public boolean update(AttribSalle a) {
 		
-		if( a.getDateAttrib() != null && a.getSalle()!=null && a.getSession()!=null && a.getRespFor()!=null ) {
+		if( a.getDateAttrib() != null && a.getSalle()!=null && a.getSession()!=null) {
 			dao.save(a);
 			return true;
 		}else {
