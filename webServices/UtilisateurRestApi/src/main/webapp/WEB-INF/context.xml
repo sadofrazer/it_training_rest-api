@@ -35,7 +35,7 @@
 			<property name="driverClassName" value="${driver}"/>
 			<property name="url" value="${url}"/>
 			<property name="username" value="${user}"/>
-			<!-- <property name="password" value="${pass}"/> -->
+		    <property name="password" value="${pass}"/> 
 		</bean>
 		
 		<bean id="emf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">

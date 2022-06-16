@@ -44,6 +44,8 @@ public class ApprenantController {
 	
 	@PostMapping
 	public ResponseEntity<Apprenant> insert(@RequestBody Apprenant a) {
+		System.out.println("vous etes ici");
+		System.out.println(a);
 		try {
 			bll.insert(a);
 			return new ResponseEntity<Apprenant>(a, HttpStatus.OK);

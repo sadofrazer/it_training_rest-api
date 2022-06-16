@@ -43,6 +43,8 @@ public class UtilisateurController {
 	
 	@PostMapping
 	public ResponseEntity<Utilisateur> insert(@RequestBody Utilisateur p) {
+		System.out.println("vous etes ici");
+		System.out.println(p);
 		try {
 			bll.insert(p);
 			return new ResponseEntity<Utilisateur>(p, HttpStatus.OK);
