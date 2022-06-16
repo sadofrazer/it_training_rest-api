@@ -30,7 +30,7 @@ public class AttribSalleBLL {
 	
 	public boolean insert(AttribSalle a) {
 		
-		if( a.getDateAttrib() != null && a.getSalle()!=null && a.getSession()!=null && a.getRespFor()!=null ) {
+		if( a.getDateAttrib() != null && a.getSalle()!=null && a.getSession()!=null) {
 			dao.save(a);
 			return true;
 		}else {
@@ -41,7 +41,7 @@ public class AttribSalleBLL {
 	
 	public boolean update(AttribSalle a) {
 		
-		if( a.getDateAttrib() != null && a.getSalle()!=null && a.getSession()!=null && a.getRespFor()!=null ) {
+		if( a.getDateAttrib() != null && a.getSalle()!=null && a.getSession()!=null) {
 			dao.save(a);
 			return true;
 		}else {
@@ -62,8 +62,19 @@ public class AttribSalleBLL {
 	}
 	
 	//if id exist in database return true, else return false
-		public boolean exist(int id) {
-			return dao.existsById(id);
-		}
+	public boolean exist(int id) {
+		return dao.existsById(id);
+	}
+	
+
+	public List<AttribSalle> getBySessionId(int id) {
+		
+		return dao.findBySessionIdSession(id);
+	}
+	
+	public List<AttribSalle> getBySalleId(int id) {
+		
+		return dao.findBySalleIdSalle(id);
+	}
 
 }
