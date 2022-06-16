@@ -72,7 +72,7 @@ public class UtilisateurController {
 			originalBDD.setPassword(u.getPassword());
 			originalBDD.setSociete(u.getSociete());
 			originalBDD.setStatut(u.getStatut());
-			originalBDD.setTypeuser(u.getTypeuser());
+			originalBDD.setTypeUser(u.getTypeUser());
 
 			bll.update(originalBDD);
 			return new ResponseEntity<Utilisateur>(u, HttpStatus.OK);

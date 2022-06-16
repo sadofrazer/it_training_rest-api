@@ -71,7 +71,7 @@ public class FormateurController {
 			originalBDD.setPassword(f.getPassword());
 			originalBDD.setSociete(f.getSociete());
 			originalBDD.setStatut(f.getStatut());
-			originalBDD.setTypeuser(f.getTypeuser());
+			originalBDD.setTypeUser(f.getTypeUser());
 			originalBDD.setCertification(f.getCertification());
 
 
