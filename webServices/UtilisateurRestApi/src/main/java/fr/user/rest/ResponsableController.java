@@ -71,7 +71,7 @@ public class ResponsableController {
 				originalBDD.setPassword(r.getPassword());
 				originalBDD.setSociete(r.getSociete());
 				originalBDD.setStatut(r.getStatut());
-				originalBDD.setTypeuser(r.getTypeuser());
+				originalBDD.setTypeUser(r.getTypeUser());
 				originalBDD.setFonction(r.getFonction());
 				
 

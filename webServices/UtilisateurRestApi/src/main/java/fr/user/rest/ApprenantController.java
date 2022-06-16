@@ -73,7 +73,7 @@ public class ApprenantController {
 			originalBDD.setPassword(a.getPassword());
 			originalBDD.setSociete(a.getSociete());
 			originalBDD.setStatut(a.getStatut());
-			originalBDD.setTypeuser(a.getTypeuser());
+			originalBDD.setTypeUser(a.getTypeUser());
 			originalBDD.setDernierDiplome(a.getDernierDiplome());
 			
 

@@ -152,13 +152,13 @@ public class Utilisateur {
 	}
 
 
-	public TypeUser getTypeuser() {
+	public TypeUser getTypeUser() {
 		return typeUser;
 	}
 
 
-	public void setTypeuser(TypeUser typeuser) {
-		this.typeUser = typeuser;
+	public void setTypeUser(TypeUser typeUser) {
+		this.typeUser = typeUser;
 	}
 
 
