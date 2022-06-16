@@ -2,7 +2,7 @@ package fr.user.bo;
 
 import java.time.LocalDate;
 
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -11,33 +11,40 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+
 
 
 @Entity
-@Table(name= "utilisateur")
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="initial")
-@DiscriminatorValue(value="U")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE )
+@DiscriminatorColumn(name="type")
+@DiscriminatorValue(value="USER")
 public class Utilisateur {
 	
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id @GeneratedValue(strategy =GenerationType.IDENTITY )
 	private int idUtilisateur;
-	private String codeUser;
+	@Column(nullable = false)
 	private String nom;
+	@Column(nullable = false)
+	private String codeUser;
 	private String prenom;
-	private String telephone;
+	@Column(nullable = false)
 	private String email;
-	private LocalDate  dateNaiss;
-	private String numeroSiret;
-	private String login;
-	private String password;
+	private String adresse;
+	private String telephone;
 	private String societe;
+	private LocalDate dateNaiss;
+	private String numeroSiret;
 	private String statut;
+	@Column(nullable = false)
+	private String login;
+	@Column(nullable = false)
+	private String password;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	private TypeUser typeuser;
+	@ManyToOne
+	@JoinColumn(name = "idType")
+	private TypeUser typeUser;
 	
 	
 
@@ -46,11 +53,11 @@ public class Utilisateur {
 	}
 
 
-	public int getIdUtilisateur() {
+	public Integer getIdUtilisateur() {
 		return idUtilisateur;
 	}
 
-	public void setIdUtilisateur(int idUtilisateur) {
+	public void setIdUtilisateur(Integer idUtilisateur) {
 		this.idUtilisateur = idUtilisateur;
 	}
 
@@ -146,12 +153,31 @@ public class Utilisateur {
 
 
 	public TypeUser getTypeuser() {
-		return typeuser;
+		return typeUser;
 	}
 
 
 	public void setTypeuser(TypeUser typeuser) {
-		this.typeuser = typeuser;
+		this.typeUser = typeuser;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Utilisateur [idUtilisateur=" + idUtilisateur + ", codeUser=" + codeUser + ", nom=" + nom + ", prenom="
+				+ prenom + ", telephone=" + telephone + ", email=" + email + ", dateNaiss=" + dateNaiss
+				+ ", numeroSiret=" + numeroSiret + ", login=" + login + ", password=" + password + ", societe="
+				+ societe + ", statut=" + statut + ", typeuser=" + typeUser + "]";
+	}
+
+
+	public String getAdresse() {
+		return adresse;
+	}
+
+
+	public void setAdresse(String adresse) {
+		this.adresse = adresse;
 	}
 
 
