@@ -31,6 +31,11 @@ public class InscriptionBLL {
 	
 	public boolean insert(Inscription i) {
 		
+		List<Inscription> all=selectAll();
+		int n = all.size();
+		int id= all.get(n-1).getIdInscription();
+		i.setCodeInscription("INSC000"+(id+1)); 
+		
 		if( i.getCodeInscription() != null && i.getSession() != null && i.getApprenant()!=null && i.getSession()!=null) {
 			dao.save(i);
 			return true;
@@ -100,5 +105,9 @@ public boolean update(Inscription i) {
 	
 	public List<Inscription> getAllByApprenantId(int id) {
 		return dao.findByApprenantIdUtilisateur(id);
+	}
+	
+	public List<Inscription> getAllOrderByCode(String statut) {
+		return dao.findByStatutOrderByIdInscription(statut);
 	}
 }
