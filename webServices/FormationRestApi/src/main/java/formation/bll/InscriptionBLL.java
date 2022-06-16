@@ -99,6 +99,6 @@ public boolean update(Inscription i) {
 	}
 	
 	public List<Inscription> getAllByApprenantId(int id) {
-		return dao.findByApprenantIdApprenant(id);
+		return dao.findByApprenantIdUtilisateur(id);
 	}
 }
