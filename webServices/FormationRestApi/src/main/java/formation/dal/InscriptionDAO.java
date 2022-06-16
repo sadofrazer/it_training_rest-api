@@ -13,6 +13,6 @@ public interface InscriptionDAO extends JpaRepository<Inscription, Integer> {
 	public Inscription findByCodeInscription(String codeInscription);
 	public List<Inscription> findBySessionFormationIdFormation(int idFormation);
 	public List<Inscription> findBySessionIdSession(int idSession);
-	public List<Inscription> findByApprenantIdApprenant(int idApprenant);
+	public List<Inscription> findByApprenantIdUtilisateur(int idApprenant);
 	
 }
