@@ -107,5 +107,16 @@ public class AttribSalle {
 		this.respFor = respFor;
 	}
 
+
+	public LocalDate getDateModif() {
+		return dateModif;
+	}
+
+
+	public void setDateModif(LocalDate dateModif) {
+		this.dateModif = dateModif;
+	}
+	
+	
 	
 }
