@@ -108,7 +108,7 @@ public class AttribSalleRest {
 	}
 	
 	@GetMapping(value = "/session/{id}")
-	public ResponseEntity<List<AttribSalle>> getAllBySessionid(int id) {
+	public ResponseEntity<List<AttribSalle>> getAllBySessionid(@PathVariable("id") int id) {
 		try {
 			return new ResponseEntity<List<AttribSalle>>(bll.getBySessionId(id), HttpStatus.OK);
 		}
@@ -118,7 +118,7 @@ public class AttribSalleRest {
 	}
 	
 	@GetMapping(value = "/salle/{id}")
-	public ResponseEntity<List<AttribSalle>> getAllBySalleid(int id) {
+	public ResponseEntity<List<AttribSalle>> getAllBySalleid(@PathVariable("id") int id) {
 		try {
 			return new ResponseEntity<List<AttribSalle>>(bll.getBySalleId(id), HttpStatus.OK);
 		}
