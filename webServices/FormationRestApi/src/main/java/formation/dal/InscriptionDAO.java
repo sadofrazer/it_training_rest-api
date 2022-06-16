@@ -14,5 +14,6 @@ public interface InscriptionDAO extends JpaRepository<Inscription, Integer> {
 	public List<Inscription> findBySessionFormationIdFormation(int idFormation);
 	public List<Inscription> findBySessionIdSession(int idSession);
 	public List<Inscription> findByApprenantIdUtilisateur(int idApprenant);
+	public List<Inscription> findByStatutOrderByIdInscription(String statut);
 	
 }

@@ -173,4 +173,14 @@ public class InscriptionRest {
 		}
 	}
 	
+	@GetMapping(value = "/order/{statut}")
+	public ResponseEntity<List<Inscription>> getAllOrderById(@PathVariable("statut") String statut) {
+		try {
+			return new ResponseEntity<List<Inscription>>(bll.getAllOrderByCode(statut), HttpStatus.OK);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<List<Inscription>>(HttpStatus.CONFLICT);
+		}
+	}
+	
 }
