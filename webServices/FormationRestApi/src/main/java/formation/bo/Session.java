@@ -152,14 +152,7 @@ public class Session {
 	public void setFormation(Formation formation) {
 		this.formation = formation;
 	}
-
-	public Formateur getIdFormateur() {
-		return formateur;
-	}
-
-	public void setIdFormateur(Formateur formateur) {
-		this.formateur = formateur;
-	}
+	
 
 	/*public List<Inscription> getInscriptions() {
 		return inscriptions;
