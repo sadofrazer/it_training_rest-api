@@ -141,5 +141,36 @@ public class InscriptionRest {
 	}
 	
 	
+	@GetMapping(value = "/session/{id}")
+	public ResponseEntity<List<Inscription>> getAllBySessionId(int id) {
+		try {
+			return new ResponseEntity<List<Inscription>>(bll.getAllBySessionId(id), HttpStatus.OK);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<List<Inscription>>(HttpStatus.CONFLICT);
+		}
+	}
+	
+	
+	@GetMapping(value = "/formation/{id}")
+	public ResponseEntity<List<Inscription>> getAllByFormationId(int id) {
+		try {
+			return new ResponseEntity<List<Inscription>>(bll.getAllByFormationId(id), HttpStatus.OK);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<List<Inscription>>(HttpStatus.CONFLICT);
+		}
+	}
+	
+	
+	@GetMapping(value = "/apprenant/{id}")
+	public ResponseEntity<List<Inscription>> getAllByApprenantId(int id) {
+		try {
+			return new ResponseEntity<List<Inscription>>(bll.getAllByApprenantId(id), HttpStatus.OK);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<List<Inscription>>(HttpStatus.CONFLICT);
+		}
+	}
 	
 }

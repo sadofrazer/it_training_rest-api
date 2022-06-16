@@ -77,16 +77,28 @@ public boolean update(Inscription i) {
 	
 	
 	//if id exist in database return true, else return false
-		public boolean exist(int id) {
-			return dao.existsById(id);
+	public boolean exist(int id) {
+		return dao.existsById(id);
+	}
+	
+	public boolean codeInscriptionExist(String code) {
+		Inscription s = getInscriptionByCode(code);
+		if(s!=null) {
+			return dao.existsById(s.getIdInscription());
+		}else {
+			return false;
 		}
-		
-		public boolean codeInscriptionExist(String code) {
-			Inscription s = getInscriptionByCode(code);
-			if(s!=null) {
-				return dao.existsById(s.getIdInscription());
-			}else {
-				return false;
-			}
-		}
+	}
+	
+	public List<Inscription> getAllBySessionId(int id) {
+		return dao.findBySessionIdSession(id);
+	}
+	
+	public List<Inscription> getAllByFormationId(int id) {
+		return dao.findBySessionFormationIdFormation(id);
+	}
+	
+	public List<Inscription> getAllByApprenantId(int id) {
+		return dao.findByApprenantIdApprenant(id);
+	}
 }

@@ -62,8 +62,19 @@ public class AttribSalleBLL {
 	}
 	
 	//if id exist in database return true, else return false
-		public boolean exist(int id) {
-			return dao.existsById(id);
-		}
+	public boolean exist(int id) {
+		return dao.existsById(id);
+	}
+	
+
+	public List<AttribSalle> getBySessionId(int id) {
+		
+		return dao.findBySessionIdSession(id);
+	}
+	
+	public List<AttribSalle> getBySalleId(int id) {
+		
+		return dao.findBySalleIdSalle(id);
+	}
 
 }
