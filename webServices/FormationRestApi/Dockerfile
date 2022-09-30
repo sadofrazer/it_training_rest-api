@@ -4,21 +4,28 @@ RUN mkdir /opt/FormationRestApi
 WORKDIR /opt/FormationRestApi
 #Dockerfile sera dans chaque webservices
 COPY . /opt/FormationRestApi/
-ENV DB_NAME = "it_training_bdd"
-ENV DB_HOST = "it-training-bdd.cloudapps-cm.com"
+
+ENV DB_NAME = "it_training"
+ENV DB_HOST = "localhost:${DB_PORT}"
 ENV DB_USER = "frazer"
 ENV DB_PASSWORD = "frazer@123"
 ENV DB_PORT=3306
-#RUN sed -ri -e 's!url="jdbc:mysql://it-training-bdd.cloudapps-cm.com:3306/it_training_bdd"!url="jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}"!g' /opt/FormationRestApi/src/main/webapp/META-INF/context.xml
-#RUN sed -ri -e 's!username="frazer"!username=${DB_USER}!g' /opt/FormationRestApi/src/main/webapp/META-INF/context.xml
-#RUN sed -ri -e 's!password="frazer@123"!password=${DB_PASSWORD}!g' /opt/FormationRestApi/src/main/webapp/META-INF/context.xml
+
+RUN sed -ie "s#DB_HOST#${DB_HOST}#g" /opt/FormationRestApi/src/main/webapp/WEB-INF/datasource.properties
+RUN sed -ie "s#DB_PORT#${DB_PORT}#g" /opt/FormationRestApi/src/main/webapp/WEB-INF/datasource.properties
+RUN sed -ie "s#DB_NAME#${DB_NAME}#g" /opt/FormationRestApi/src/main/webapp/WEB-INF/datasource.properties
+RUN sed -ie "s#DB_USER#${DB_USER}#g" /opt/FormationRestApi/src/main/webapp/WEB-INF/datasource.properties
+RUN sed -ie "s#DB_PASSWORD#${DB_PASSWORD}#g" /opt/FormationRestApi/src/main/webapp/WEB-INF/datasource.properties
+
+RUN cat /opt/FormationRestApi/src/main/webapp/WEB-INF/datasource.properties
+
 RUN mvn clean 
 RUN mvn install
 RUN mvn package
 RUN cp /opt/FormationRestApi/target/FormationRestApi.war /opt/FormationRestApi.war
 
 
-FROM tomcat:8.5.79-jre17-temurin as tomcat
+FROM tomcat:8.5.79-jre17-temurin as tomcats
 LABEL name="sadofrazer"
 COPY --from=build /opt/FormationRestApi.war /usr/local/tomcat/webapps/
 EXPOSE 8080
