@@ -11,11 +11,11 @@ ENV DB_USER = "frazer"
 ENV DB_PASSWORD = "frazer@123"
 ENV DB_PORT=3306
 
-RUN sed -ie "s#DB_HOST#${DB_HOST}#g" /opt/UtilisateurRestApi/src/main/webapp/WEB-INF/datasource.properties
-RUN sed -ie "s#DB_PORT#${DB_PORT}#g" /opt/UtilisateurRestApi/src/main/webapp/WEB-INF/datasource.properties
-RUN sed -ie "s#DB_NAME#${DB_NAME}#g" /opt/UtilisateurRestApi/src/main/webapp/WEB-INF/datasource.properties
-RUN sed -ie "s#DB_USER#${DB_USER}#g" /opt/UtilisateurRestApi/src/main/webapp/WEB-INF/datasource.properties
-RUN sed -ie "s#DB_PASSWORD#${DB_PASSWORD}#g" /opt/UtilisateurRestApi/src/main/webapp/WEB-INF/datasource.properties
+# RUN sed -ie "s#DB_HOST#${DB_HOST}#g" /opt/UtilisateurRestApi/src/main/webapp/WEB-INF/datasource.properties
+# RUN sed -ie "s#DB_PORT#${DB_PORT}#g" /opt/UtilisateurRestApi/src/main/webapp/WEB-INF/datasource.properties
+# RUN sed -ie "s#DB_NAME#${DB_NAME}#g" /opt/UtilisateurRestApi/src/main/webapp/WEB-INF/datasource.properties
+# RUN sed -ie "s#DB_USER#${DB_USER}#g" /opt/UtilisateurRestApi/src/main/webapp/WEB-INF/datasource.properties
+# RUN sed -ie "s#DB_PASSWORD#${DB_PASSWORD}#g" /opt/UtilisateurRestApi/src/main/webapp/WEB-INF/datasource.properties
 
 RUN mvn clean install
 RUN mvn package
