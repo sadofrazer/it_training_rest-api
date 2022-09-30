@@ -5,12 +5,12 @@ WORKDIR /opt/FormationRestApi
 #Dockerfile sera dans chaque webservices
 COPY . /opt/FormationRestApi/
 
-ENV DB_NAME = "it_training"
-ENV DB_HOST = "localhost:${DB_PORT}"
-ENV DB_USER = "frazer"
-ENV DB_PASSWORD = "frazer@123"
+ENV DB_NAME=it_training
+ENV DB_HOST=localhost
+ENV DB_USER=frazer
+ENV DB_PASSWORD=frazer@123
 ENV DB_PORT=3306
-
+ENV HIBERNATE_MODE=create
 # RUN sed -ie "s#DB_HOST#${DB_HOST}#g" /opt/FormationRestApi/src/main/webapp/WEB-INF/datasource.properties
 # RUN sed -ie "s#DB_PORT#${DB_PORT}#g" /opt/FormationRestApi/src/main/webapp/WEB-INF/datasource.properties
 # RUN sed -ie "s#DB_NAME#${DB_NAME}#g" /opt/FormationRestApi/src/main/webapp/WEB-INF/datasource.properties
