@@ -5,10 +5,10 @@ services:
         image: mysql:5.7
         restart: always
         environment:
-            - MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PASSWORD}"
-            - MYSQL_DATABASE="${DB_NAME}"
-            - MYSQL_USER="${DB_USER}"
-            - MYSQL_PASSWORD="${DB_PASSWORD}"
+            - 'MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}'
+            - 'MYSQL_DATABASE="${DB_NAME}'
+            - 'MYSQL_USER=${DB_USER}'
+            - 'MYSQL_PASSWORD=${DB_PASSWORD}'
         ports:
             - '3306:3306'
         volumes:
@@ -26,11 +26,11 @@ services:
       ports:
             - '${FORMATION_API_PORT}:8080'
       environment:
-            - DB_USER="${DB_USER}"
-            - DB_PASSWORD="${DB_PASSWORD}"
-            - DB_NAME="${DB_NAME}"
-            - DB_HOST=it-training-db
-            - DB_PORT=3306
+            - 'DB_USER=${DB_USER}'
+            - 'DB_PASSWORD=${DB_PASSWORD}'
+            - 'DB_NAME=${DB_NAME}'
+            - 'DB_HOST=it-training-db'
+            - 'DB_PORT=3306'
       networks:
             - it_training_back
             - it_training_front
@@ -45,11 +45,11 @@ services:
       ports:
             - "${UTILISATEUR_API_PORT}:8080"
       environment:
-            - DB_USER="${DB_USER}"
-            - DB_PASSWORD="${DB_PASSWORD}"
-            - DB_NAME="${DB_NAME}"
-            - DB_HOST=it-training-db
-            - DB_PORT=3306
+            - 'DB_USER=${DB_USER}'
+            - 'DB_PASSWORD=${DB_PASSWORD}'
+            - 'DB_NAME=${DB_NAME}'
+            - 'DB_HOST=it-training-db'
+            - 'DB_PORT=3306'
       networks:
             - it_training_back
             - it_training_front
@@ -65,8 +65,8 @@ services:
       ports:
             - '${WEBAPP_PORT}:80'
       environment:
-            - FORMATION_API_HOST=formation-rest-api
-            - UTILISATEUR_API_HOST=utilisateur-rest-api
+            - 'FORMATION_API_HOST=formation-rest-api'
+            - 'UTILISATEUR_API_HOST=utilisateur-rest-api'
       networks:
             - it_training_front
 
