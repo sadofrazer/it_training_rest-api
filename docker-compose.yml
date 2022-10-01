@@ -25,7 +25,7 @@ services:
         networks: 
             - it_training_back
         links:
-            - 'it-trainig-mysql:db'
+            - 'it-training-db:db'
         ports:
             - '8091:80'
         image: phpmyadmin
