@@ -15,6 +15,20 @@ services:
             - it_training_db_data:/var/lib/mysql
         networks:
             - it_training_back
+    
+
+    phpmyadmin:
+        container_name: myadmin
+        depends_on:
+            - it-training-db
+        restart: always
+        networks: 
+            - it_training_back
+        links:
+            - 'it-trainig-mysql:db'
+        ports:
+            - '8091:80'
+        image: phpmyadmin
 
 
     formation-rest-api:
